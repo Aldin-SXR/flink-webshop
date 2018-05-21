@@ -14,7 +14,7 @@ class PersistanceManager {
 
 	/* Get basic product info from database */
 	public function get_basic_product_info() {
-		$stmt = $this->pdo->query("SELECT product_name, product_price, product_picture FROM products;");
+		$stmt = $this->pdo->query("SELECT product_name, product_price, product_picture, status FROM products;");
 		return $stmt->fetchAll();
 	}
 }

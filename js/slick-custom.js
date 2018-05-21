@@ -88,7 +88,7 @@
             slidesToShow: 4,
             slidesToScroll: 4,
             infinite: true,
-            autoplay: false,
+            autoplay: true, /* or false */
             autoplaySpeed: 6000,
             arrows: true,
             appendArrows: $('.wrap-slick2'),
