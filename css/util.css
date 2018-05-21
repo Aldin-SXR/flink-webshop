@@ -3368,7 +3368,8 @@ TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT
 .m-text27 {
 	font-family: Montserrat-Regular;
 	font-size: 18px;
-	color: #888888;
+	color: #f2f2f2;
+	text-shadow: 1px 1px rgb(80, 80, 80);
 	line-height: 1.5;
 	letter-spacing: 2px;
 }
@@ -3417,11 +3418,22 @@ TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT
 .xl-text3 {
 	font-family: Poppins-Bold;
 	font-size: 60px;
-	color: #111111;
+	color: #f2f2f2;
 	line-height: 1.2;
 	letter-spacing: 3px;
 	text-transform: uppercase;
 }
+
+.xl-text4 {
+	font-family: Poppins-Bold;
+	font-size: 60px;
+	color: #f2f2f2;
+	text-shadow: 2px 2px rgb(80, 80, 80);
+	line-height: 1.2;
+	letter-spacing: 3px;
+/*	text-transform: uppercase; */
+}
+
 
 
 /*[ Color ]
@@ -3820,7 +3832,8 @@ SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE
 }
 
 .bo15 {
-	border-bottom: 3px solid #111111;
+	border-bottom: 3px solid #f2f2f2;
+	box-shadow: 0px 2px rgb(80, 80, 80);
 }
 
 /*[  ]
