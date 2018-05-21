@@ -1107,7 +1107,7 @@ li.sale-noti > a {
 
 .side-menu .sub-menu > li {
   padding-left: 12px;
-  padding-top: 
+  padding-top: 0;
 }
 
 .side-menu .sub-menu a:hover {
@@ -1222,7 +1222,7 @@ li.sale-noti > a {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+/*  flex-wrap: wrap; */
 }
 
 /*[ Menu ]
