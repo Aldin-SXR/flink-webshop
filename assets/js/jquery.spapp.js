@@ -38,20 +38,20 @@
         return;
       }
 
-      if(elm.hasClass("spapp-created")) {
+     /* if(elm.hasClass("spapp-created")) {
         route.onReady();
-      } else {
+      } else { 
         elm.addClass("spapp-created");
         if( ! route.load) {
           route.onCreate();
           route.onReady();
-        } else {
+        } else {*/
           elm.load(config.templateDir+route.load, function() {
             route.onCreate();
             route.onReady();
           });
-        }
-      }
+     //   }
+    //  }
     }
 
     // and run

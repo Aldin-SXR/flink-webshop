@@ -2346,4 +2346,6 @@ input.num-product::-webkit-inner-spin-button {
     margin: 0; 
 }
 
-
+pre {
+  white-space: pre-wrap;
+}

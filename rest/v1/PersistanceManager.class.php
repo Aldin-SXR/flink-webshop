@@ -14,8 +14,22 @@ class PersistanceManager {
 
 	/* Get basic product info from database */
 	public function get_basic_product_info() {
-		$stmt = $this->pdo->query("SELECT product_name, product_price, product_picture, status FROM products;");
+		$stmt = $this->pdo->query("SELECT id, product_name, product_price, product_picture, status FROM products;");
 		return $stmt->fetchAll();
+	}
+
+	/* Get available categories from database */
+	public function get_categories() {
+		$stmt = $this->pdo->query("SELECT * FROM categories;");
+		return $stmt->fetchAll();
+	}
+
+	/* Get detailed product info from database */
+	public function get_detailed_product_info($id) {
+		$stmt = $this->pdo->prepare("SELECT p.*, c.category_name AS product_category  FROM products AS p INNER JOIN 
+															categories AS c on p.product_category = c.id WHERE p.id = :id;");
+		$stmt->execute(array("id" => $id));
+		return $stmt->fetch();
 	}
 }
 ?>
