@@ -678,6 +678,10 @@ li.sale-noti > a {
   color: #e65540;
 }
 
+.highlight {
+  color: #e65540;
+}
+
 .main_menu > li:hover > a {
   text-decoration: none;
   border-bottom: 1px solid #333333;
@@ -2081,11 +2085,11 @@ li.sale-noti > a {
   padding-left: 50px;
 }
 .table-shopping-cart .column-2 {
-  width: 330px;
+  width: 300px;
   padding-right: 30px;
 }
 .table-shopping-cart .column-3 {
-  width: 133px;
+  width: 163px;
   padding-right: 30px;
 }
 .table-shopping-cart .column-4 {

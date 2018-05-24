@@ -12,13 +12,7 @@
         <div class="container-table-cart pos-relative">
             <div class="wrap-table-shopping-cart bgwhite">
                 <table class="table-shopping-cart">
-                    <tr class="table-head">
-                        <th class="column-1"></th>
-                        <th class="column-2">Product</th>
-                        <th class="column-3">Price</th>
-                        <th class="column-4 p-l-70">Quantity</th>
-                        <th class="column-5">Total</th>
-                    </tr>
+
                     <!-- Cart data -->
                 </table>
             </div>
@@ -38,7 +32,7 @@
                 </div>
             </div>
 
-            <div class="size10 trans-0-4 m-t-10 m-b-10">
+            <div id="update-cart" class="size10 trans-0-4 m-t-10 m-b-10">
                 <!-- Button -->
                 <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
                     Update Cart
@@ -139,12 +133,35 @@
     $(".table-shopping-cart").on("click", ".btn-num-product-down", function (e) {
         e.preventDefault();
         var numProduct = Number($(this).next().val());
-        if (numProduct > 1) $(this).next().val(numProduct - 1);
+        if (numProduct > 1) {
+            $(this).next().val(numProduct - 1);
+            $(this).parent().parent().next().html(parseFloat($(this).parent().parent().next().html().split(" ")[
+                0]) - parseFloat($(this).parent().parent().prev().html().split(" ")[0]) + " BAM");
+        }
     });
 
     $(".table-shopping-cart").on("click", ".btn-num-product-up", function (e) {
         e.preventDefault();
         var numProduct = Number($(this).prev().val());
         $(this).prev().val(numProduct + 1);
+        $(this).parent().parent().next().html(parseFloat($(this).parent().parent().prev().html().split(" ")[0]) *
+            parseInt($(this).prev().val()) + " BAM");
+    });
+</script>
+<!--===============================================================================================-->
+<script>
+    $("#update-cart").on("click", "button", function(e) {
+        $(".table-shopping-cart").find(".table-row").each(function(key, value) {
+            var product = {
+                id: $(value).attr("id"),
+                name: $(value).find(".column-2").html(),
+                picture: $(value).find("img").attr("src"),
+                price: $(value).find(".column-3").html(),
+                quantity: parseInt($(value).find("#p-quantity").val())
+            }
+            Utility.addToSession("product_" + product.id, JSON.stringify(product));
+            renewPopUpCart();
+            swal("", "Your cart has been updated!", "success");
+        });
     });
 </script>

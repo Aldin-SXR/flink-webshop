@@ -51,9 +51,9 @@
 					<img src="images/icons/logo.png" alt="IMG-LOGO">
 				</a>
 
-				<!-- Header Icon -->
+				<!-- Header icons -->
 				<div class="header-icons3 p-t-38 p-b-60 p-l-8">
-					<a href="#" class="header-wrapicon1 dis-block">
+					<a href="#login-overlay" data-toggle="modal" data-backdrop="true" class="header-wrapicon1 dis-block">
 						<img src="images/icons/icon-header-01.png" class="header-icon1" alt="ICON">
 					</a>
 					<span class="linedivide1"></span>
@@ -75,7 +75,7 @@
 							<div class="header-cart-buttons">
 								<div class="header-cart-wrapbtn">
 									<!-- Button -->
-									<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+									<a href="#cart" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
 										View Cart
 									</a>
 								</div>
@@ -548,10 +548,15 @@
 	<script src="assets/js/jquery.spapp.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="js/utility.js"></script>
-		<!--===============================================================================================-->
-	<script type="text/javascript" src="vendor/slick/slick.min.js"></script>
-<script type="text/javascript" src="js/slick-custom.js"></script>
 	<!--===============================================================================================-->
+	<script type="text/javascript" src="vendor/slick/slick.min.js"></script>
+	<script type="text/javascript" src="js/slick-custom.js"></script>
+	<!--===============================================================================================-->
+	<script>
+		$(document).ready(function () {
+			$("#login-overlay").modal("hide");
+		});
+	</script>
 	<script type="text/javascript">
 		var app = $.spapp({
 			defaultView: "#landing",
@@ -567,7 +572,7 @@
 
 					/* (re)create cart information on every page load */
 					if (index == 3) {
-						renewCart();
+						//		renewCart();
 					}
 				},
 				onReady: function (e) {
@@ -627,14 +632,16 @@
 	<script>
 		function renewCart() {
 			var cartProducts = Utility.getMultipleFromSession("product");
-			if (cartProducts !== []) {
-				var html = "";
+			if (cartProducts.length != 0) {
+				var html =
+					'<tr class="table-head"><th class="column-1"></th><th class="column-2">Product</th><th class="column-3">Price</th><th class="column-4 p-l-70">Quantity</th><th class="column-5">Total</th></tr>';
 				var price = 0;
 				var notifications = 0;
 				for (var i = 0; i < cartProducts.length; i++) {
 					var product = JSON.parse(cartProducts[i]);
 					html +=
-						' <tr class="table-row"> <td class="column-1"> <div class="cart-img-product b-rad-4 o-f-hidden"> <img src="' +
+						' <tr id="' + product.id +
+						'" class="table-row"> <td class="column-1"> <div class="cart-img-product b-rad-4 o-f-hidden"> <img src="' +
 						product.picture + '" alt="IMG-PRODUCT"> </div></td><td class="column-2">' + product.name +
 						'</td><td class="column-3">' + product.price +
 						'</td><td class="column-4"> <div class="flex-w bo5 of-hidden w-size17"> <button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2"> <i class="fs-12 fa fa-minus" aria-hidden="true"></i> </button> <input id="p-quantity" class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="' +
@@ -644,14 +651,16 @@
 					//		price += parseFloat((product.price).split(" ")[0]) * parseInt(product.quantity);
 					//		notifications += product.quantity;
 				}
-				$(".table-shopping-cart").append(html);
+				$(".table-shopping-cart").html(html);
 				//			$(".header-cart-total").html("Totals: " + price + " BAM");
 				//			$("#cart-notification").html(notifications); 
+			} else {
+				$(".table-shopping-cart").html("<tr class='table-row'><td class='column-1'><p class='lead'>There are currently no items in cart.</p><td></tr>");
 			}
 		}
 	</script>
+	<!--===============================================================================================-->
 	<script>
-		
 	</script>
 	<!--===============================================================================================-->
 	<script>
@@ -684,5 +693,79 @@
 	<script src="js/page-load.js"></script>
 	<script src="js/main.js"></script>
 </body>
+<!-- Log in/sign up modal -->
+<div id="login-overlay" class="modal fade">
+	<div class="modal-dialog modal-lg modal-dialog-centered ">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">Log in to Flink Webshop</h4>
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only">Close</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="card bg-light p-3">
+							<div class="card-body">
+								<div class="card-title">
+									<p class="lead highlight">Sign in
+									</p>
+								</div>
+								<form id="loginForm" method="POST" action="/login/" novalidate="novalidate">
+									<div class="form-group">
+										<label for="username" class="control-label">Username:</label>
+										<input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username"
+										    placeholder="example@gmail.com">
+										<span class="help-block"></span>
+									</div>
+									<div class="form-group">
+										<label for="password" class="control-label">Password:</label>
+										<input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
+										<span class="help-block"></span>
+									</div>
+									<div class="checkbox">
+										<!--					<label>
+															<input type="checkbox" name="remember" id="remember"> Remember login
+														</label> -->
+									</div>
+									<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+										Log in
+									</a>
+									<a href="/forgot/" class="btn btn-default btn-block">Help to login</a>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<p class="lead">Register now for
+							<span class="highlight">FREE</span>
+						</p>
+						<ul class="list-unstyled" style="line-height: 2">
+							<li>
+								<span class="fa fa-check highlight"></span> Save your cart</li>
+							<li>
+								<span class="fa fa-check highlight"></span> Add products to wishlist</li>
+							<li>
+								<span class="fa fa-check highlight"></span> Get a 5% discount on all purchases
+							</li>
+							<li>
+								<a href="/read-more/">
+									<!--				<u>Read more</u> -->
+								</a>
+							</li>
+						</ul>
+						<p>
+							<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">
+								Sign up
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 </html>
