@@ -16,6 +16,20 @@ var Utility = {
     /* Get value from session storage */ 
     getFromSession: function(key) {
         return window.sessionStorage.getItem(key);
+    },
+    /* remove from session storage */
+    removeFromSession: function(key) {
+        window.sessionStorage.removeItem(key);
+    },
+    /* Get multiple items from session storage */
+    getMultipleFromSession: function(filter_key) {
+        var results = [];
+        $.each(window.sessionStorage, function(item_key) {
+            if (item_key.includes(filter_key)) {
+                results.push(window.sessionStorage.getItem(item_key));
+            }
+        });
+        return results;
     }
 
 }

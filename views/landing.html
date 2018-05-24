@@ -1410,11 +1410,11 @@
 <script type="text/javascript" src="vendor/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/slick-custom.js"></script>
 <script src="js/utility.js"></script>
-<!-- AJAX handler -->
+<!--===============================================================================================-->
 <script>
 	/* Store currently picked product */
 	$(".slick2").on("click", "a", function () {
-		Utility.addToSession("product_id", $(this).attr("id"));
+		Utility.addToSession("p_id", $(this).attr("id"));
 		$("#sale-link").addClass("sale-noti");
 	});
 
@@ -1443,6 +1443,30 @@
 						' BAM</span></div></div></div>';
 				}
 				$(".slick2").slick("slickAdd", html);
+				/* add item to cart */
+				$('.block2-btn-addcart').each(function () {
+					var productId = $(this).parent().parent().parent().find(".block2-name").attr("id");
+					var productName = $(this).parent().parent().parent().find(".block2-name").html();
+					var productPrice = $(this).parent().parent().parent().find(".block2-price").html();
+					var productPicture = $(this).parent().parent().parent().find("img").attr("src");
+					$(this).on("click", function () {
+						var productQuantity = 1;
+						swal(productName, "has been added to cart!", "success");
+						/* Add new product to cart/increase quantity of same products */
+						if (Utility.getFromSession("product_" + productId) !== null)
+							productQuantity = JSON.parse(Utility.getFromSession("product_" + productId)).quantity + 1;
+						/* product definition */
+						var product = {
+							id: productId,
+							name: productName,
+							price: productPrice,
+							picture: productPicture,
+							quantity: productQuantity
+						}
+						Utility.addToSession("product_" + productId, JSON.stringify(product));
+						updatePopUpCart(product);
+					});
+				});
 			}
 		});
 	});
@@ -1468,17 +1492,33 @@
 </script>
 <!--===============================================================================================-->
 <script>
-	$('.block2-btn-addcart').each(function () {
-		var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-		$(this).on('click', function () {
-			swal(nameProduct, "is added to cart !", "success");
-		});
-	});
-
 	$('.block2-btn-addwishlist').each(function () {
 		var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
 		$(this).on('click', function () {
 			swal(nameProduct, "is added to wishlist !", "success");
 		});
 	});
+</script>
+<!--===============================================================================================-->
+<script>
+	function updatePopUpCart(product) {
+		/* Update single cart item */
+		if ($(".header-cart-wrapitem").find("#product_" + product.id).html() !== undefined) {
+			$(".header-cart-wrapitem").find("#product_" + product.id).find(".header-cart-item-info").html(product.quantity +
+				' x ' + product.price);
+		} else {
+			$(".header-cart-wrapitem").append('<li id="product_' + product.id +
+				'" class="header-cart-item"><div class="header-cart-item-img"><img src="' +
+				product.picture +
+				'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">' + product.name +
+				'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + product.price +
+				'</span></div></li>');
+		}
+		/* Update price */
+		var price = parseFloat($(".header-cart-total").html().split(" ")[1]) + parseFloat((product.price).split(" ")[0]);
+		$(".header-cart-total").html("Totals: " + price + " BAM");
+		/* Update cart counter */
+		$("#cart-notification").html(parseInt($("#cart-notification").html()) + 1); 
+		//		$(".header-cart-wrapitem").append('<li class="header-cart-item"><div class="header-cart-item-img"><img src="images/item-cart-01.jpg" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">White Shirt With Pleat Detail Back</a><span class="header-cart-item-info">1 x $19.00</span></div></li>');
+	}
 </script>

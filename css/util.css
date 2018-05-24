@@ -3662,7 +3662,7 @@ SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE
 }
 
 .w-size18 {
-	max-width: 442px;
+	max-width: 100%; /* switched from 442px */
 }
 
 .w-size19 {

@@ -124,7 +124,7 @@
         /* Get new product info on each call */
         function getProductInfo() {
             $.ajax({
-                url: "rest/v1/db/products/" + Utility.getFromSession("product_id"),
+                url: "rest/v1/db/products/" + Utility.getFromSession("p_id"),
                 method: "GET",
                 success: function (result) {
                     $(".slick3").slick("slickRemove", 0);

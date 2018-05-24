@@ -56,67 +56,20 @@
 					<a href="#" class="header-wrapicon1 dis-block">
 						<img src="images/icons/icon-header-01.png" class="header-icon1" alt="ICON">
 					</a>
-
 					<span class="linedivide1"></span>
-
 					<div class="header-wrapicon2">
 						<img src="images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
-						<span class="header-icons-noti">0</span>
+						<span id="cart-notification" class="header-icons-noti">0</span>
 
 						<!-- Header cart noti -->
 						<div class="header-cart header-dropdown">
+							<!-- Cart items -->
 							<ul class="header-cart-wrapitem">
-								<li class="header-cart-item">
-									<div class="header-cart-item-img">
-										<img src="images/item-cart-01.jpg" alt="IMG">
-									</div>
-
-									<div class="header-cart-item-txt">
-										<a href="#" class="header-cart-item-name">
-											White Shirt With Pleat Detail Back
-										</a>
-
-										<span class="header-cart-item-info">
-											1 x $19.00
-										</span>
-									</div>
-								</li>
-
-								<li class="header-cart-item">
-									<div class="header-cart-item-img">
-										<img src="images/item-cart-02.jpg" alt="IMG">
-									</div>
-
-									<div class="header-cart-item-txt">
-										<a href="#" class="header-cart-item-name">
-											Converse All Star Hi Black Canvas
-										</a>
-
-										<span class="header-cart-item-info">
-											1 x $39.00
-										</span>
-									</div>
-								</li>
-
-								<li class="header-cart-item">
-									<div class="header-cart-item-img">
-										<img src="images/item-cart-03.jpg" alt="IMG">
-									</div>
-
-									<div class="header-cart-item-txt">
-										<a href="#" class="header-cart-item-name">
-											Nixon Porter Leather Watch In Tan
-										</a>
-
-										<span class="header-cart-item-info">
-											1 x $17.00
-										</span>
-									</div>
-								</li>
 							</ul>
 
+							<!-- Cart total -->
 							<div class="header-cart-total">
-								Total: $75.00
+								Totals: 0 BAM
 							</div>
 
 							<div class="header-cart-buttons">
@@ -151,11 +104,11 @@
 							</li>
 
 							<li class="sale-noti">
-								<a id="sale-link" href="product.html">Sale</a>
+								<a id="sale-link" href="#product">Sale</a>
 							</li>
 
 							<li>
-								<a href="cart.html">Features</a>
+								<a id="cart-link" href="#cart">Cart</a>
 							</li>
 
 							<li>
@@ -215,7 +168,7 @@
 
 							<!-- Header cart noti -->
 							<div class="header-cart header-dropdown">
-								<ul class="header-cart-wrapitem">
+								<ul class="header-cart-wrapitem2">
 									<li class="header-cart-item">
 										<div class="header-cart-item-img">
 											<img src="images/item-cart-01.jpg" alt="IMG">
@@ -380,6 +333,7 @@
 			<section id="landing" data-load="landing.html"></section>
 			<section id="contact" data-load="contact.html"></section>
 			<section id="product" data-load="product.html"></section>
+			<section id="cart" data-load="cart.html"></section>
 		</main>
 
 		<!-- Footer -->
@@ -592,38 +546,139 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
 	<!--===============================================================================================-->
 	<script src="assets/js/jquery.spapp.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="js/utility.js"></script>
+		<!--===============================================================================================-->
+	<script type="text/javascript" src="vendor/slick/slick.min.js"></script>
+<script type="text/javascript" src="js/slick-custom.js"></script>
+	<!--===============================================================================================-->
 	<script type="text/javascript">
 		var app = $.spapp({
 			defaultView: "#landing",
 			templateDir: "./views/"
 		});
 
-		$(["landing", "contact", "product"]).each(function (index, name) {
+		$(["landing", "contact", "product", "cart"]).each(function (index, name) {
 			app.route({
 				view: name,
 				load: name + ".html",
+				onCreate: function (e) {
+					renewPopUpCart();
+
+					/* (re)create cart information on every page load */
+					if (index == 3) {
+						renewCart();
+					}
+				},
 				onReady: function (e) {
 					$('#' + name + "-link").closest('ul').find('li').removeClass('sale-noti')
 					$('#' + name + "-link").closest('li').addClass('sale-noti')
 					if (index == 0) {
 						/* turn on carousel when on landing page */
-						setTimeout(function() {
+						setTimeout(function () {
 							$(".slick1")[0].slick.setPosition();
 							$(".slick1").slick("slickPlay");
-					//		$(".slick1").slick("refresh");
+							//		$(".slick1").slick("refresh");
 						}, 100);
 					} else {
 						$(".slick1").slick("slickPause");
 					}
-					
+
 					/* reload 'Product' page every time with new product infromation */
 					if (index != 2) {
 						$("#product").removeClass("spapp-created");
+					}
+
+					/* renew cart information on every page show */
+					if (index == 3) {
+						renewCart();
 					}
 				}
 			});
 		});
 		app.run();
+	</script>
+	<!--===============================================================================================-->
+	<script>
+		function renewPopUpCart() {
+			var cartProducts = Utility.getMultipleFromSession("product");
+			if (cartProducts !== []) {
+				var html = "";
+				var price = 0;
+				var notifications = 0;
+				for (var i = 0; i < cartProducts.length; i++) {
+					var product = JSON.parse(cartProducts[i]);
+					html += '<li id="product_' + product.id +
+						'" class="header-cart-item"><div class="header-cart-item-img"><img src="' +
+						product.picture +
+						'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">' + product.name +
+						'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + product.price +
+						'</span></div></li>'
+					price += parseFloat((product.price).split(" ")[0]) * parseInt(product.quantity);
+					notifications += product.quantity;
+				}
+				$(".header-cart-wrapitem").html(html);
+				$(".header-cart-total").html("Totals: " + price + " BAM");
+				$("#cart-notification").html(notifications);
+			}
+		}
+	</script>
+	<!--===============================================================================================-->
+	<script>
+		function renewCart() {
+			var cartProducts = Utility.getMultipleFromSession("product");
+			if (cartProducts !== []) {
+				var html = "";
+				var price = 0;
+				var notifications = 0;
+				for (var i = 0; i < cartProducts.length; i++) {
+					var product = JSON.parse(cartProducts[i]);
+					html +=
+						' <tr class="table-row"> <td class="column-1"> <div class="cart-img-product b-rad-4 o-f-hidden"> <img src="' +
+						product.picture + '" alt="IMG-PRODUCT"> </div></td><td class="column-2">' + product.name +
+						'</td><td class="column-3">' + product.price +
+						'</td><td class="column-4"> <div class="flex-w bo5 of-hidden w-size17"> <button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2"> <i class="fs-12 fa fa-minus" aria-hidden="true"></i> </button> <input id="p-quantity" class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="' +
+						product.quantity +
+						'"> <button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2"> <i class="fs-12 fa fa-plus" aria-hidden="true"></i> </button> </div></td><td class="column-5">' +
+						parseFloat(product.price.split(" ")[0] * product.quantity) + ' BAM</td></tr>';
+					//		price += parseFloat((product.price).split(" ")[0]) * parseInt(product.quantity);
+					//		notifications += product.quantity;
+				}
+				$(".table-shopping-cart").append(html);
+				//			$(".header-cart-total").html("Totals: " + price + " BAM");
+				//			$("#cart-notification").html(notifications); 
+			}
+		}
+	</script>
+	<script>
+		
+	</script>
+	<!--===============================================================================================-->
+	<script>
+		/* Dynamically bind click listeners */
+		$(".header-cart-wrapitem").on("click", "li", function () {
+			/* update popup cart data */
+			var headerCart = $(this).find(".header-cart-item-info");
+			if (headerCart.html().split(" ")[0] > 1) {
+				headerCart.html(parseInt(headerCart.html().split(" ")[0] - 1) +
+					" " + headerCart.html().split(" ")[1] + " " + headerCart.html().split(" ")[2] + " BAM");
+			} else {
+				$(this).remove();
+			}
+			/* update price data */
+			$(".header-cart-total").html("Totals: " + parseFloat($(".header-cart-total").html().split(" ")[1] - headerCart.html()
+				.split(" ")[2]) + " BAM");
+			var product = JSON.parse(Utility.getFromSession($(this).attr("id")));
+			/* update/remove from session storage */
+			if (product.quantity == 1) {
+				Utility.removeFromSession($(this).attr("id"));
+			} else {
+				product.quantity = product.quantity - 1;
+				Utility.addToSession($(this).attr("id"), JSON.stringify(product));
+			}
+			/* update cart notification */
+			$("#cart-notification").html(parseInt($("#cart-notification").html()) - 1);
+		});
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/page-load.js"></script>
