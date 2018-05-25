@@ -26,7 +26,7 @@
 
                 <div class="size12 trans-0-4 m-t-10 m-b-10 m-r-10">
                     <!-- Button -->
-                    <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+                    <button id="apply-coupon-button" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
                         Apply coupon
                     </button>
                 </div>
@@ -34,7 +34,7 @@
 
             <div id="update-cart" class="size10 trans-0-4 m-t-10 m-b-10">
                 <!-- Button -->
-                <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+                <button id="update-cart-button" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
                     Update Cart
                 </button>
             </div>
@@ -135,8 +135,9 @@
         var numProduct = Number($(this).next().val());
         if (numProduct > 1) {
             $(this).next().val(numProduct - 1);
-            $(this).parent().parent().next().html(parseFloat($(this).parent().parent().next().html().split(" ")[
-                0]) - parseFloat($(this).parent().parent().prev().html().split(" ")[0]) + " BAM");
+            $(this).parent().parent().next().html((parseFloat($(this).parent().parent().next().html().split(" ")[
+                    0]) - parseFloat($(this).parent().parent().prev().html().split(" ")[0])).toFixed(2) +
+                " BAM");
         }
     });
 
@@ -144,24 +145,38 @@
         e.preventDefault();
         var numProduct = Number($(this).prev().val());
         $(this).prev().val(numProduct + 1);
-        $(this).parent().parent().next().html(parseFloat($(this).parent().parent().prev().html().split(" ")[0]) *
-            parseInt($(this).prev().val()) + " BAM");
+        $(this).parent().parent().next().html((parseFloat($(this).parent().parent().prev().html().split(" ")[0]) *
+            parseInt($(this).prev().val())).toFixed(2) + " BAM");
+    });
+
+    $(".table-shopping-cart").on("click", ".cart-img-product", function (e) {
+        $(this).parent().parent().hide();
     });
 </script>
 <!--===============================================================================================-->
 <script>
-    $("#update-cart").on("click", "button", function(e) {
-        $(".table-shopping-cart").find(".table-row").each(function(key, value) {
-            var product = {
-                id: $(value).attr("id"),
-                name: $(value).find(".column-2").html(),
-                picture: $(value).find("img").attr("src"),
-                price: $(value).find(".column-3").html(),
-                quantity: parseInt($(value).find("#p-quantity").val())
-            }
-            Utility.addToSession("product_" + product.id, JSON.stringify(product));
-            renewPopUpCart();
-            swal("", "Your cart has been updated!", "success");
-        });
+    /* Update cart on button click (save cart changes) */
+    $("#update-cart").on("click", "button", function (e) {
+        if (Utility.getMultipleFromSession("product").length != 0) {
+            $(".table-shopping-cart").find(".table-row").each(function (key, value) {
+                /* if row is hidden, the product has been deleted from cart entirely */
+                if ($(value).attr("style") == "display: none;") {
+                    Utility.removeFromSession("product_" + $(value).attr("id"));
+                } else {
+                    var product = {
+                        id: $(value).attr("id"),
+                        name: $(value).find(".column-2").html(),
+                        picture: $(value).find("img").attr("src"),
+                        price: $(value).find(".column-3").html(),
+                        quantity: parseInt($(value).find("#p-quantity").val())
+                    }
+                    Utility.addToSession("product_" + product.id, JSON.stringify(product));
+                }
+                renewPopUpCart();
+                swal("Your cart ", "has been successfully updated!", "success");
+            });
+        } else {
+            swal("Your cart", "is empty! Try adding something to it.", "error");
+        }
     });
 </script>

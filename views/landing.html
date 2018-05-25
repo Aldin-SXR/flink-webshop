@@ -1415,7 +1415,7 @@
 	/* Store currently picked product */
 	$(".slick2").on("click", "a", function () {
 		Utility.addToSession("p_id", $(this).attr("id"));
-		$("#sale-link").addClass("sale-noti");
+		$("#sale-link").addClass("highlight");
 	});
 
 	$(document).ready(function () {
@@ -1437,7 +1437,7 @@
 						'<div class="item-slick2 p-l-15 p-r-15"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
 						status + '"><img src="' +
 						result[i].product_picture +
-						'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
+						'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
 						result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
 						result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i].product_price +
 						' BAM</span></div></div></div>';
@@ -1463,8 +1463,10 @@
 							picture: productPicture,
 							quantity: productQuantity
 						}
-						Utility.addToSession("product_" + productId, JSON.stringify(product));
+						/* update small popup cart */
 						updatePopUpCart(product);
+						/* store new/updated cart product in session storage */
+						Utility.addToSession("product_" + productId, JSON.stringify(product));
 					});
 				});
 			}
@@ -1473,6 +1475,7 @@
 </script>
 <!--===============================================================================================-->
 <script>
+	/* Get all categories from database */
 	$(document).ready(function () {
 		$.ajax({
 			url: "rest/v1/db/categories",
@@ -1501,22 +1504,27 @@
 </script>
 <!--===============================================================================================-->
 <script>
+	/* Update single cart item in the popup cart*/
 	function updatePopUpCart(product) {
-		/* Update single cart item */
 		if ($(".header-cart-wrapitem").find("#product_" + product.id).html() !== undefined) {
 			$(".header-cart-wrapitem").find("#product_" + product.id).find(".header-cart-item-info").html(product.quantity +
 				' x ' + product.price);
 		} else {
-			$(".header-cart-wrapitem").append('<li id="product_' + product.id +
+			var html = '<li id="product_' + product.id +
 				'" class="header-cart-item"><div class="header-cart-item-img"><img src="' +
 				product.picture +
-				'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">' + product.name +
+				'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#product" class="header-cart-item-name">' + product.name +
 				'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + product.price +
-				'</span></div></li>');
+				'</span></div></li>';
+			if (Utility.getMultipleFromSession("product").length != 0) {
+				$(".header-cart-wrapitem").append(html);
+			} else {
+				$(".header-cart-wrapitem").html(html);
+			}
 		}
 		/* Update price */
 		var price = parseFloat($(".header-cart-total").html().split(" ")[1]) + parseFloat((product.price).split(" ")[0]);
-		$(".header-cart-total").html("Totals: " + price + " BAM");
+		$(".header-cart-total").html("Totals: " + price.toFixed(2) + " BAM");
 		/* Update cart counter */
 		$("#cart-notification").html(parseInt($("#cart-notification").html()) + 1); 
 		//		$(".header-cart-wrapitem").append('<li class="header-cart-item"><div class="header-cart-item-img"><img src="images/item-cart-01.jpg" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">White Shirt With Pleat Detail Back</a><span class="header-cart-item-info">1 x $19.00</span></div></li>');
