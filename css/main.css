@@ -1180,6 +1180,10 @@ li.sale-noti > a {
   max-height: 27px;
 }
 
+.hidden {
+  display: none;
+}
+
 .fixed-header2 {
   z-index: 1300;
   position: fixed;

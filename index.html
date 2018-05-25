@@ -105,8 +105,8 @@
 								<a id="shop-link" href="#shop">Shop</a>
 							</li>
 
-							<li>
-								<a id="product-link" href="#product">Sale</a>
+							<li id="product-li" style="display: none;">
+								<a id="product-link" href="#product">Product</a>
 							</li>
 
 							<li>
@@ -524,6 +524,9 @@
 					/* reload 'Product' page every time with new product infromation */
 					if (index != 2) {
 						$("#product").removeClass("spapp-created");
+						$("#product-li").css("display", "none");
+					} else {
+						$("#product-li").css("display", "block");
 					}
 
 					/* renew cart information on every page show */
