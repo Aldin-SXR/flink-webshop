@@ -1884,6 +1884,11 @@ li.sale-noti > a {
   .bg-title-page .m-text13 {font-size: 16px;}
 }
 
+a.disable-link {
+  pointer-events: none;
+  cursor: default;
+}
+
 /*[ rs NoUI ]
 ///////////////////////////////////////////////////////////
 */

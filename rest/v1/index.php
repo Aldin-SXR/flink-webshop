@@ -21,6 +21,10 @@ Flight::route("GET /db/products/@id", function($id) {
     Flight::json(Flight::db()->get_detailed_product_info($id));
 });
 
+Flight::route("GET /db/find/@category/@range", function($category, $range) {
+    Flight::json(Flight::db()->get_products_via_category($category, $range));
+});
+
 Flight::route("GET /scrape/ig", function() {
     Flight::json(Flight::instagram()->fetch_shortcodes());
 });
