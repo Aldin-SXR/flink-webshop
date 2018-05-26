@@ -29,7 +29,7 @@
                         <div class="flex-sb-m flex-w p-t-16">
                             <div class="w-size11">
                                 <!-- Button -->
-                                <button class="flex-c-m size4 bg7 bo-rad-15 hov1 s-text14 trans-0-4">
+                                <button id="filter-price" class="flex-c-m size4 bg7 bo-rad-15 hov1 s-text14 trans-0-4">
                                     Filter
                                 </button>
                             </div>
@@ -114,15 +114,15 @@
 <script type="text/javascript" src="vendor/noui/nouislider.min.js"></script>
 <script type="text/javascript">
     /*[ No UI slider ]
-            	    ===========================================================*/
+                    	    ===========================================================*/
     var filterBar = document.getElementById('filter-bar');
 
     noUiSlider.create(filterBar, {
-        start: [50, 100],
+        start: [0, 200],
         connect: true,
         range: {
-            'min': 50,
-            'max': 100
+            'min': 0,
+            'max': 200
         }
     });
 
@@ -140,10 +140,36 @@
     $(".leftbar").on("click", ".c-name", function () {
         /* change link color based on active */
         $(".c-name").each(function (index) {
-            $(this).siblings().find("span").removeClass("active1");
+            $(this).siblings().find("span").removeClass("highlight");
         });
-        $(this).find("span").addClass("active1");
+        $(this).find("span").addClass("highlight");
         /* list filtered items */
-        listShopItems($(this).find("span").html());
+        Utility.addToSession("p_cat",  $(this).find("span").html());
+        var range = $("#value-lower").html() + "&" + $("#value-upper").html();
+        Utility.addToSession("p_range",  range);
+        listShopItems( $(this).find("span").html(), range);
+    });
+
+    $(".leftbar").on("click", "#filter-price", function () {
+        /* check which category is active */
+        var category;
+        $(".c-name").each(function (index) {
+            if ($(this).find("span").hasClass("highlight")) {
+                category = $(this).find("span").html();
+            }
+        });
+        var range = $("#value-lower").html() + "&" + $("#value-upper").html();
+        Utility.addToSession("p_range",  range);
+        listShopItems( $(this).find("span").html(), range);
+    });
+</script>
+<!--===============================================================================================-->
+<script>
+    $(document).ready(function () {
+        $("#filtered-product-list").on("click", "a", function () {
+            Utility.addToSession("p_id", $(this).attr("id"));
+            getProductInfo();
+            $("#sale-link").addClass("highlight");
+        });
     });
 </script>

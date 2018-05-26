@@ -32,6 +32,13 @@ class PersistanceManager {
 		return $stmt->fetch();
 	}
 
+	/* Get detailed product info from database */
+	public function check_coupon($coupon) {
+		$stmt = $this->pdo->prepare("SELECT * FROM coupons WHERE coupon_value = :coupon_value");
+		$stmt->execute(array("coupon_value" => $coupon));
+		return $stmt->fetch();
+	}
+
 	/* Get products based on category */
 	public function get_products_via_category($category, $range) {
 		$query = "SELECT p.id, product_name, product_price, product_picture, status FROM products AS p INNER JOIN
@@ -71,5 +78,37 @@ class PersistanceManager {
 		
 		return $stmt->fetchAll();
 	}
+
+	public function add_new_user($user) {
+        /* try for duplicate entities */
+        try {
+            /* reset autoincrement on every try to avoid skipped indices */
+            $this->pdo->query("ALTER TABLE users AUTO_INCREMENT = 1");
+            /* prepare and execute the statement */
+            $stmt = $this->pdo->prepare("INSERT INTO users (user_name, email, password, country, address, zipcode, activation_hash, activated)
+                                                                VALUES (:user_name, :email, :password, :country, :address, :zipcode, :activation_hash, :activated);");
+            $activation_hash = md5(((string)rand(0, 1000)).$user["email"]);
+            $stmt->execute(array(
+            "user_name" => $user["username"],
+            "email" => $user["email"],
+			"password" => password_hash($user["password"], PASSWORD_DEFAULT),
+			"country" => ($user["country"] == "Select country:") ? NULL : $user["country"],
+			"address" => $user["address"],
+			"zipcode" => $user["zipcode"],
+            "activation_hash" => $activation_hash,
+            "activated" => 0 
+            ));
+            /* send activation mail */
+            Mailer::mail($user["email"], $activation_hash, $user["user_name"], $user["password"]);
+            return array("status" => "success");
+        } catch (Exception $e) {
+            /* this error code signifies duplicate entry */
+            if ($e->errorInfo[1] == 1062)
+                return array("status" => "duplicate");
+            else 
+                return array("status" => "error");
+        }
+	}
+	
 }
 ?>

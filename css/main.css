@@ -95,6 +95,14 @@ body, html {
   font-weight: 400;
 }
 
+.box-trans {
+  background:rgba(230, 85, 64, 0.7);
+}
+
+.box-white {
+  color: white;
+}
+
 /* ------------------------------------ */
 a {
 	font-family: Montserrat-Regular;
@@ -140,6 +148,24 @@ a:hover {
 .pseudo-link:hover {
 	text-decoration: none;
 	color: #e65540;
+}
+
+.disabled {
+  background: #555555;
+  pointer-events: none;
+  cursor: default;
+}
+
+.pseudo-span:hover {
+  cursor: pointer;
+}
+
+.form-border {
+  border: 1px solid #222222 !important;
+}
+
+.error {
+  color: #e65540;
 }
 
 /* ------------------------------------ */
@@ -2293,7 +2319,8 @@ body {padding-right: 0px !important;}
 
 /* ------------------------------------ */
 .modal-backdrop {
-  background-color: transparent;
+  background-color: black;
+  z-index: 1200;
 }
 
 #modal-video-01 {

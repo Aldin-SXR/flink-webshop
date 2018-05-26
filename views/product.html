@@ -138,54 +138,8 @@
 <script src="js/utility.js"></script>
 <!--===============================================================================================-->
 <script>
-    var product = {};
-    /* Get new product info on each call */
-    function getProductInfo() {
-        $.ajax({
-            url: "rest/v1/db/products/" + Utility.getFromSession("p_id"),
-            method: "GET",
-            success: function (result) {
-                /* get necessary data */
-                product.id = result.id;
-                product.name = result.product_name;
-                product.price = result.product_price + " BAM";
-                product.picture = result.product_picture;
-                /* load product info into product page */
-                $(".slick3").slick("slickRemove", 0);
-                $(".product-detail-name").html(result.product_name);
-                $("#product-price").html(result.product_price + " BAM");
-                $("#product-tag").html(result.product_tag);
-                $("#product-category").html("<strong>Category: <em>" + result.product_category +
-                    "</em></strong>");
-                $("#product-description").html(result.product_description);
-                $("#product-specification").html("<pre class='s-text8'>" + result.product_specification +
-                    "</pre>");
-                var html = '<div class="item-slick3" data-thumb="' + result.product_picture +
-                    '"><div class="wrap-pic-w"><img src="' + result.product_picture +
-                    '" alt="IMG-PRODUCT"></div></div>';
-                $(".slick3").slick("slickAdd", html);
-                /* load breadcrumb */
-                $("#bread-category").html(result.product_category);
-                $("#bread-product").html(result.product_name);
-            }
-        });
-    }
     $(document).ready(function () {
         getProductInfo();
-        /* chosen quantity of items */
-        $("#add-product-to-cart").on("click", function () {
-            var quantity = parseInt($("#add-product-to-cart").parent().prev().find(".num-product").val());
-            /* check if item already exists in cart and add quantitiy */
-            if (Utility.getFromSession("product_" + product.id) !== null)
-                quantity = quantity + JSON.parse(Utility.getFromSession("product_" + product.id)).quantity;
-            product.quantity = quantity;
-            /* store new/updated cart product in session storage */
-            Utility.addToSession("product_" + product.id, JSON.stringify(product));
-            renewPopUpCart();
-            swal(parseInt($("#add-product-to-cart").parent().prev().find(".num-product").val()) +
-                " items", "have been successfully added to your cart!", "success");
-            $("#add-product-to-cart").parent().prev().find(".num-product").val("1");
-        });
     });
 </script>
 <!--===============================================================================================-->

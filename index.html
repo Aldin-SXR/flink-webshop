@@ -114,11 +114,7 @@
 							</li>
 
 							<li>
-								<a href="blog.html">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.html">About</a>
+								<a id="about-link" href="#about">About</a>
 							</li>
 
 							<li>
@@ -158,7 +154,7 @@
 			<div class="btn-show-menu">
 				<!-- Header Icon mobile -->
 				<div class="header-icons-mobile">
-					<a href="#" class="header-wrapicon1 dis-block">
+					<a href="#login-overlay" data-toggle="modal" data-backdrop="true" class="header-wrapicon1 dis-block">
 						<img src="images/icons/icon-header-01.png" class="header-icon1" alt="ICON">
 					</a>
 
@@ -249,11 +245,7 @@
 					</li>
 
 					<li class="item-menu-mobile">
-						<a href="blog.html">Blog</a>
-					</li>
-
-					<li class="item-menu-mobile">
-						<a href="about.html">About</a>
+						<a href="#about">About</a>
 					</li>
 
 					<li class="item-menu-mobile">
@@ -271,6 +263,7 @@
 			<section id="product" data-load="product.html"></section>
 			<section id="cart" data-load="cart.html"></section>
 			<section id="shop" data-load="shop.html"></section>
+			<section id="about" data-load="about.html"></section>
 		</main>
 
 		<!-- Footer -->
@@ -298,69 +291,31 @@
 
 				<div class="w-size7 p-t-30 p-l-15 p-r-15 respon7">
 					<h4 class="s-text12 p-b-30">
-						Categories
-					</h4>
-
-					<ul>
-						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Men
-							</a>
-						</li>
-
-						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Women
-							</a>
-						</li>
-
-						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Dresses
-							</a>
-						</li>
-
-						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Sunglasses
-							</a>
-						</li>
-					</ul>
-				</div>
-
-				<div class="w-size7 p-t-30 p-l-15 p-r-15 respon7">
-					<h4 class="s-text12 p-b-30">
 						Links
 					</h4>
 
 					<ul>
 						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Search
+							<a href="#shop" class="s-text7">
+								Shop
 							</a>
 						</li>
 
 						<li class="p-b-9">
-							<a href="#" class="s-text7">
+							<a href="#about" class="s-text7">
 								About Us
 							</a>
 						</li>
 
 						<li class="p-b-9">
-							<a href="#" class="s-text7">
+							<a href="#contact" class="s-text7">
 								Contact Us
-							</a>
-						</li>
-
-						<li class="p-b-9">
-							<a href="#" class="s-text7">
-								Returns
 							</a>
 						</li>
 					</ul>
 				</div>
 
-				<div class="w-size7 p-t-30 p-l-15 p-r-15 respon7">
+				<!--		<div class="w-size7 p-t-30 p-l-15 p-r-15 respon7">
 					<h4 class="s-text12 p-b-30">
 						Help
 					</h4>
@@ -390,9 +345,9 @@
 							</a>
 						</li>
 					</ul>
-				</div>
+				</div> -->
 
-				<div class="w-size8 p-t-30 p-l-15 p-r-15 respon6">
+				<div class="w-size8 p-t-30 p-l-15 p-r-15 respon6 m-l-auto">
 					<h4 class="s-text12 p-b-30">
 						Newsletter
 					</h4>
@@ -464,6 +419,7 @@
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/bootstrap/js/popper.js"></script>
 	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/select2/select2.min.js"></script>
 	<script type="text/javascript">
@@ -473,8 +429,6 @@
 		});
 	</script>
 	<script type="text/javascript" src="vendor/noui/nouislider.min.js"></script>
-	<!--===============================================================================================-->
-	<script type="text/javascript" src="vendor/countdowntime/countdowntime.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/lightbox2/js/lightbox.min.js"></script>
 	<!--===============================================================================================-->
@@ -500,7 +454,7 @@
 			templateDir: "./views/"
 		});
 
-		$(["landing", "contact", "product", "cart", "shop"]).each(function (index, name) {
+		$(["landing", "contact", "product", "cart", "shop", "about"]).each(function (index, name) {
 			app.route({
 				view: name,
 				load: name + ".html",
@@ -508,8 +462,11 @@
 					renewPopUpCart();
 				},
 				onReady: function (e) {
-					$('#' + name + "-link").closest('ul').find('li').removeClass('sale-noti')
-					$('#' + name + "-link").closest('li').addClass('sale-noti')
+					$(".btn-show-menu-mobile").removeClass("is-active");
+					$(".wrap-side-menu").slideUp();
+					$("#" + name + "-link").closest("ul").find("li").removeClass("sale-noti");
+					$("#" + name + "-link").closest("li").addClass("sale-noti");
+
 					if (index == 0) {
 						/* turn on carousel when on landing page */
 						setTimeout(function () {
@@ -533,7 +490,14 @@
 					}
 					/* Load categories for shopping page */
 					if (index == 4) {
-						loadCategories(true);
+						loadCategories();
+					}
+					/* Remove category information if not on product page */
+					if (index != 2 && index != 4) {
+						Utility.removeFromSession("p_cat");
+
+						//			$("#value-lower").html("0");
+						//			$("#value-upper").html("200");
 					}
 				}
 			});
@@ -592,8 +556,11 @@
 						parseFloat(parseFloat(product.price.split(" ")[0]) * product.quantity).toFixed(2) + ' BAM</td></tr>';
 					//		price += parseFloat((product.price).split(" ")[0]) * parseInt(product.quantity);
 					//		notifications += product.quantity;
+					price += parseFloat(parseFloat(product.price.split(" ")[0]) * product.quantity);
 				}
 				$(".table-shopping-cart").html(html);
+				var coupon = (Utility.getFromSession("appl_c")) ? parseFloat(Utility.getFromSession("appl_c")) : 0;
+				$("#cart-subtotals").html((price - (price * coupon)).toFixed(2) + " BAM");
 				//			$(".header-cart-total").html("Totals: " + price + " BAM");
 				//			$("#cart-notification").html(notifications); 
 			} else {
@@ -605,6 +572,52 @@
 	</script>
 	<!--===============================================================================================-->
 	<script>
+		/* Get new product info on each call */
+		function getProductInfo() {
+			var product = {};
+			$.ajax({
+				url: "rest/v1/db/products/" + Utility.getFromSession("p_id"),
+				method: "GET",
+				success: function (result) {
+					/* get necessary data */
+					product.id = result.id;
+					product.name = result.product_name;
+					product.price = result.product_price + " BAM";
+					product.picture = result.product_picture;
+					/* load product info into product page */
+					$(".slick3").slick("slickRemove", 0);
+					$(".product-detail-name").html(result.product_name);
+					$("#product-price").html(result.product_price + " BAM");
+					$("#product-tag").html(result.product_tag);
+					$("#product-category").html("<strong>Category: <em>" + result.product_category +
+						"</em></strong>");
+					$("#product-description").html(result.product_description);
+					$("#product-specification").html("<pre class='s-text8'>" + result.product_specification +
+						"</pre>");
+					var html = '<div class="item-slick3" data-thumb="' + result.product_picture +
+						'"><div class="wrap-pic-w"><img src="' + result.product_picture +
+						'" alt="IMG-PRODUCT"></div></div>';
+					$(".slick3").slick("slickAdd", html);
+					/* load breadcrumb */
+					$("#bread-category").html(result.product_category);
+					$("#bread-product").html(result.product_name);
+				}
+			});
+			/* chosen quantity of items */
+			$("#add-product-to-cart").off("click").on("click", function () {
+				var quantity = parseInt($("#add-product-to-cart").parent().prev().find(".num-product").val());
+				/* check if item already exists in cart and add quantitiy */
+				if (Utility.getFromSession("product_" + product.id) !== null)
+					quantity = quantity + JSON.parse(Utility.getFromSession("product_" + product.id)).quantity;
+				product.quantity = quantity;
+				/* store new/updated cart product in session storage */
+				Utility.addToSession("product_" + product.id, JSON.stringify(product));
+				renewPopUpCart();
+				swal(parseInt($("#add-product-to-cart").parent().prev().find(".num-product").val()) +
+					" items", "have been successfully added to your cart!", "success");
+				$("#add-product-to-cart").parent().prev().find(".num-product").val("1");
+			});
+		}
 	</script>
 	<!--===============================================================================================-->
 	<script>
@@ -638,7 +651,7 @@
 		});
 		$(".header-cart-wrapitem").on("click", ".header-cart-item-name", function () {
 			Utility.addToSession("p_id", $(this).parent().parent().attr("id").split("_")[1]);
-			$("#product").removeClass("spapp-created");
+			getProductInfo();
 		});
 	</script>
 	<!--===============================================================================================-->
@@ -700,73 +713,100 @@
 			//		$(".header-cart-wrapitem").append('<li class="header-cart-item"><div class="header-cart-item-img"><img src="images/item-cart-01.jpg" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">White Shirt With Pleat Detail Back</a><span class="header-cart-item-info">1 x $19.00</span></div></li>');
 		}
 	</script>
-		<!--===============================================================================================-->
-<script>
-		$("#filtered-product-list").on("click", "a", function () {
-			Utility.addToSession("p_id", $(this).attr("id"));
-			$("#sale-link").addClass("highlight");
-		});
-	
+	<!--===============================================================================================-->
+	<script>
 		/* find items in shop based on parameters */
 		function listShopItems(category, range) {
 			/* fallback values */
-			if (range === undefined)
-				range = "all";
-			if (category === undefined || category == "All")
-				category = "all";
+			if (range === undefined || range == null) {
+				if (Utility.getFromSession("p_range")) {
+					range = Utility.getFromSession("p_range");
+				} else {
+					range = "all";
+				}
+			}
+
+			if (category === undefined || category == "All") {
+				/* check if arrived here from category selection on landing */
+				if (Utility.getFromSession("p_cat")) {
+					if (Utility.getFromSession("p_cat") == "All") {
+						category = "all";
+					} else {
+						category = Utility.getFromSession("p_cat");
+					}
+					/* highlight appropriate category */
+					$(".c-name").each(function (index) {
+						if (category == "all") var newC = "All";
+						else var newC = category;
+						if ($(this).find("span").html() == newC) {
+							$(this).find("span").addClass("highlight");
+						} else {
+							$(this).find("span").removeClass("highlight");
+						}
+					});
+				} else {
+					category = "all";
+				}
+			}
+			/* Send an AJAX request for filtered products */
 			$.ajax({
 				url: "rest/v1/db/find/" + category + "/" + range,
 				method: "GET",
 				success: function (result) {
-					var html = "";
-					for (var i = 0; i < result.length; i++) {
-						/* get item status */
-						var status = "";
-						if (result[i].status == "new")
-							status = "block2-labelnew"
-						else if (result[i].status == "hot")
-							status = "block2-labelsale"
-						/* build HTML */
-						html +=
-							'<div class="col-sm-12 col-md-6 col-lg-4 p-b-50"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
-							status + '"><img src="' +
-							result[i].product_picture +
-							'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="shop-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
-							result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
-							result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i]
-							.product_price +
-							' BAM</span></div></div></div>';
+					if (result.length != 0) {
+						var html = "";
+						for (var i = 0; i < result.length; i++) {
+							/* get item status */
+							var status = "";
+							if (result[i].status == "new")
+								status = "block2-labelnew"
+							else if (result[i].status == "hot")
+								status = "block2-labelsale"
+							/* build HTML */
+							html +=
+								'<div class="col-sm-12 col-md-6 col-lg-4 p-b-50"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
+								status + '"><img src="' +
+								result[i].product_picture +
+								'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="shop-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
+								result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
+								result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i]
+								.product_price +
+								' BAM</span></div></div></div>';
+						}
+						(result.length != 1) ? $("#result-count").html("Showing " + result.length + " results."):
+							$("#result-count").html("Showing " + result.length + " result.");
+						$("#filtered-product-list").html(html);
+						addSingleItemToCart(".shop-page-btn");
+					} else {
+						$("#filtered-product-list").html(
+							"<p class='lead'>Unfortunately, there are no items that fit your parameters.</p>");
+						$("#result-count").html("No results.");
 					}
-					(result.length > 1) ? $("#result-count").html("Showing " + result.length + " results."): 
-														$("#result-count").html("Showing " + result.length + " result.");
-					$("#filtered-product-list").html(html);
-					addSingleItemToCart(".shop-page-btn");
 				}
 			});
 		}
 	</script>
 	<!--===============================================================================================-->
-<script>
+	<script>
 		/* Load product categories for shop */
-		function loadCategories(loadItems, items) {
+		function loadCategories() {
 			$.ajax({
 				url: "rest/v1/db/categories",
 				method: "GET",
 				success: function (result) {
 					var html =
-						'<li class="c-name p-t-4"><span class="pseudo-link active1 s-text13">All</span></li>';
+						'<li class="c-name p-t-4"><span class="pseudo-link highlight s-text13">All</span></li>';
 					for (var i = 0; i < result.length; i++) {
 						html += '<li class="c-name p-t-4"><span class="pseudo-link s-text13">' +
 							result[i].category_name + '</span></li>';
 					}
 					$(".category-listing").html(html);
-					if (loadItems === true)
-						listShopItems();
+					listShopItems();
 				}
 			});
 		};
 	</script>
-		<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="js/page-load.js"></script>
 	<script src="js/main.js"></script>
 </body>
@@ -782,68 +822,78 @@
 					<span class="sr-only">Close</span>
 				</button>
 			</div>
+			<!-- Dynamically loaded modal body -->
 			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="card bg-light p-3">
-							<div class="card-body">
-								<div class="card-title">
-									<p class="lead highlight">Sign in
-									</p>
-								</div>
-								<form id="loginForm" method="POST" action="/login/" novalidate="novalidate">
-									<div class="form-group">
-										<label for="username" class="control-label">Username:</label>
-										<input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username"
-										    placeholder="example@gmail.com">
-										<span class="help-block"></span>
-									</div>
-									<div class="form-group">
-										<label for="password" class="control-label">Password:</label>
-										<input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
-										<span class="help-block"></span>
-									</div>
-									<div class="checkbox">
-										<!--					<label>
-															<input type="checkbox" name="remember" id="remember"> Remember login
-														</label> -->
-									</div>
-									<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-										Log in
-									</a>
-									<a href="/forgot/" class="btn btn-default btn-block">Help to login</a>
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<p class="lead">Register now for
-							<span class="highlight">FREE</span>
-						</p>
-						<ul class="list-unstyled" style="line-height: 2">
-							<li>
-								<span class="fa fa-check highlight"></span> Save your cart</li>
-							<li>
-								<span class="fa fa-check highlight"></span> Add products to wishlist</li>
-							<li>
-								<span class="fa fa-check highlight"></span> Get a 5% discount on all purchases
-							</li>
-							<li>
-								<a href="/read-more/">
-									<!--				<u>Read more</u> -->
-								</a>
-							</li>
-						</ul>
-						<p>
-							<a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">
-								Sign up
-							</a>
-						</p>
-					</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
 </div>
 
 </html>
+
+<script>
+	var loginScreen =
+		'<div class="row"><div class="col-sm-6"><div class="card bg-light p-3"><div class="card-body"><div class="card-title"><p class="lead highlight">Sign in</p></div><form id="loginForm" method="POST" action="/login/" novalidate="novalidate"><div class="form-group"><label for="username" class="control-label">Username:</label><input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com"><span class="help-block"></span></div><div class="form-group"><label for="password" class="control-label">Password:</label><input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password"><span class="help-block"></span></div><a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Log in</a><a href="/forgot/" class="btn btn-default btn-block">Help to login</a></form></div></div></div><div class="col-sm-6"><p class="lead">Register now for<span class="highlight"> FREE</span></p><ul class="list-unstyled" style="line-height: 2"><li><span class="fa fa-check highlight"></span> Save your cart</li><li><span class="fa fa-check highlight"></span> Add products to wishlist</li><li><span class="fa fa-check highlight"></span> Get a 5% discount on all purchases</li><li></a></li></ul><p><span id="sign-up-redirect" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Sign up</span></p></div></div>';
+	var signupScreen =
+		'<div class="row"><div class="col-sm-12"><div class="card bg-light p-3"><div class="card-body"><div class="card-title"><p class="lead highlight">Sign up</p></div><form id="signupForm"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="username" class="control-label"><em>Username: *</em></label><input type="text" class="form-border form-control" id="username" name="username" value="" required="" title="Please enter you username"><span class="help-block"></span></div></div><div class="col-sm-6"><div class="form-group"><label for="email" class="control-label"><em>Email: *</em></label><input type="email" class="form-border form-control" id="email" name="email" value="" required="" title="Please enter your email"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="password" class="control-label"><em>Password: *</em></label><input type="password" class="form-border form-control" id="password" name="password" value="" required="" title="Please enter your password"><span class="help-block"></span></div></div><div class="col-sm-6"><div class="form-group"><label for="rePassword" class="control-label"><em>Confirm password: *</em></label><input type="password" class="form-border form-control" id="rePassword" name="rePassword" value="" required="" title="Please enter your password"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group"><label for="country" class="control-label"><em>Country:</em></label><select class="form-control" name="country" id="country-list"><option value="BA">Bosnia & Herzegovina</option><option value="HR">Croatia</option><option value="SR">Serbia</option><option value="MN">Montenegro</option><option value="SL">Slovenia</option><option value="MK">Macedonia</option></select></div></div><div class="col-sm-5"><div class="form-group"><label for="address" class="control-label"><em>Address:</em></label><input type="text" class="form-border form-control" id="address" name="address" value="" title="Please enter your address"><span class="help-block"></span></div></div><div class="col-sm-3"><div class="form-group"><label for="zipcode" class="control-label"><em>Zipcode:</em></label><input type="number" class="form-border form-control" id="zipcode" name="zipcode" value="" title="Please enter your zipcode"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-10"><button type="submit" id="sign-up-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Sign up</button></div><div class="col-sm-2"><span id="go-back-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4"><i class="fa fa-arrow-left" aria-hidden="true"></i></span></div></div><span class="btn btn-default btn-block"><small>Fields marked with an asterisk(*) are mandatory.</small></span></form></div></div></div></div>';
+	/* When modal is closed, revert to basic login screen */
+	$("#login-overlay").on("hidden.bs.modal", function() {
+		$(".modal-body").html(loginScreen);
+	});
+
+	/* Initial loading of modal */
+	$(".modal-body").ready(function () {
+		$(".modal-body").html(loginScreen);
+	})
+
+	/* go back to login from sign up form */
+	$(".modal-body").on("click", "#go-back-button", function () {
+		$(".modal-body").html(loginScreen);
+	});
+
+	$(".modal-body").on("click", "#sign-up-redirect", function () {
+		$(".modal-body").html(signupScreen);
+		$("#signupForm").validate({
+				rules: {
+					username: {
+						required: true,
+						rangelength: [8, 24]
+					},
+					email: {
+						required: true,
+						email: true
+					},
+					password: {
+						required: true,
+						rangelength: [8, 24]
+					},
+					rePassword: {
+						required: true,
+						equalTo: "#password"
+					}
+				},
+				messages: {
+					username: {
+						required: "You must choose a username.",
+						rangelength: "Your username should be between {0} and {1} characters."
+					},
+					email: {
+						required: "You must enter an email.",
+						email: "You must enter a valid email address"
+					},
+					password: {
+						required: "You must choose a password.",
+						rangelength: "Your password must be between {0} and {1} characters."
+					},
+					rePassword: {
+						required: "You must confirm your password.",
+						equalTo: "The passwords do not match."
+					}
+				},
+				submitHandler: function(form) {
+					form.submit();
+				}
+			});
+	});
+</script>

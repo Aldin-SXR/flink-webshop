@@ -92,7 +92,7 @@
     
     /*[ Show menu mobile ]
     ===========================================================*/
-    $('.btn-show-menu-mobile').on('click', function(){
+    $('.btn-show-menu-mobile').off("click").on('click', function(){
         $(this).toggleClass('is-active');
         $('.wrap-side-menu').slideToggle();
     });
