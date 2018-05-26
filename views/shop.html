@@ -10,9 +10,7 @@
                     </h4>
 
                     <!-- List of categories -->
-                    <ul id="category-list" class="p-b-54">
-                        <li class="c-name p-t-4">
-                        </li>
+                    <ul class="category-listing p-b-54">
                     </ul>
 
                     <!--  -->
@@ -53,7 +51,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-md-8 col-lg-9 p-b-50">
+            <div id="product-listing" class="col-sm-6 col-md-8 col-lg-9 p-b-50">
                 <!--  -->
                 <div class="flex-sb-m flex-w p-b-35">
                     <div class="flex-w">
@@ -78,9 +76,8 @@
                             </select>
                         </div>
                     </div>
-
-                    <span class="s-text8 p-t-5 p-b-5">
-                        Showing 1–12 of 16 results
+                    <!-- Result count -->
+                    <span id="result-count" class="s-text8 p-t-5 p-b-5">
                     </span>
                 </div>
 
@@ -90,10 +87,10 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination flex-m flex-w p-t-26">
+                <!--     <div class="pagination flex-m flex-w p-t-26">
                     <a href="#" class="item-pagination flex-c-m trans-0-4 active-pagination">1</a>
                     <a href="#" class="item-pagination flex-c-m trans-0-4">2</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -117,7 +114,7 @@
 <script type="text/javascript" src="vendor/noui/nouislider.min.js"></script>
 <script type="text/javascript">
     /*[ No UI slider ]
-        	    ===========================================================*/
+            	    ===========================================================*/
     var filterBar = document.getElementById('filter-bar');
 
     noUiSlider.create(filterBar, {
@@ -140,66 +137,13 @@
 </script>
 <!--===============================================================================================-->
 <script>
-    $("#category-list").ready(function () {
-        $.ajax({
-            url: "rest/v1/db/categories",
-            method: "GET",
-            success: function (result) {
-                var html = '<li class="c-name p-t-4"><a href="javascript:;" class="s-text13 active1">All</a></li>';
-                for (var i = 0; i < result.length; i++) {
-                    html += '<li class="c-name p-t-4"><a href="javascript:;" class="s-text13">' +
-                        result[i].category_name + '</a></li>';
-                }
-                $("#category-list").append(html);
-            }
-        });
-    });
-</script>
-<!--===============================================================================================-->
-<script>
     $(".leftbar").on("click", ".c-name", function () {
         /* change link color based on active */
         $(".c-name").each(function (index) {
-            $(this).siblings().find("a").removeClass("active1");
+            $(this).siblings().find("span").removeClass("active1");
         });
-        $(this).find("a").addClass("active1");
+        $(this).find("span").addClass("active1");
         /* list filtered items */
-        listShopItems($(this).find("a").html());
+        listShopItems($(this).find("span").html());
     });
-</script>
-<!--===============================================================================================-->
-<script>
-    /* find items in shop based on parameters */
-    function listShopItems(category, range) {
-        /* fallback values */
-        if (range === undefined)
-            range = "all";
-        if (category === undefined || category == "All")
-            category = "all";
-        $.ajax({
-            url: "rest/v1/db/find/" + category + "/" + range,
-            method: "GET",
-            success: function (result) {
-                var html = "";
-                for (var i = 0; i < result.length; i++) {
-                    /* get item status */
-					var status = "";
-					if (result[i].status == "new")
-						status = "block2-labelnew"
-					else if (result[i].status == "hot")
-						status = "block2-labelsale"
-					/* build HTML */
-					html +=
-						'<div class="col-sm-12 col-md-6 col-lg-4 p-b-50"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
-						status + '"><img src="' +
-						result[i].product_picture +
-						'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
-						result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
-						result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i].product_price +
-						' BAM</span></div></div></div>';
-                }
-                $("#filtered-product-list").html(html);
-            }
-        });
-    }
 </script>

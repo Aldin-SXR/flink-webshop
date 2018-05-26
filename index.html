@@ -129,12 +129,12 @@
 				</div>
 			</div>
 			<div class="bottombar flex-col-c p-b-65">
-					<div class="bottombar-social t-center p-b-8">
-						<a target="_blank" href="https://www.facebook.com/Flink-1528897597158926" class="topbar-social-item fa fa-facebook"></a>
-						<a target="_blank" href="https://www.instagram.com/flink_home" class="topbar-social-item fa fa-instagram"></a>
-						<a target="_blank" href="https://www.linkedin.com/company/bsmart" class="topbar-social-item fa fa-linkedin"></a>
-					</div>
-		</div>
+				<div class="bottombar-social t-center p-b-8">
+					<a target="_blank" href="https://www.facebook.com/Flink-1528897597158926" class="topbar-social-item fa fa-facebook"></a>
+					<a target="_blank" href="https://www.instagram.com/flink_home" class="topbar-social-item fa fa-instagram"></a>
+					<a target="_blank" href="https://www.linkedin.com/company/bsmart" class="topbar-social-item fa fa-linkedin"></a>
+				</div>
+			</div>
 
 			<!--	<div class="bottombar-child2 p-r-20">
 					<div class="topbar-language rs1-select2">
@@ -165,37 +165,37 @@
 					<span class="linedivide2"></span>
 
 					<div class="header-wrapicon2">
-							<img src="images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
-							<span id="cart-notification" class="header-icons-noti">0</span>
-	
-							<!-- Header cart noti -->
-							<div class="header-cart header-dropdown">
-								<!-- Cart items -->
-								<ul class="header-cart-wrapitem2">
-								</ul>
-	
-								<!-- Cart total -->
-								<div class="header-cart-total">
-									Totals: 0 BAM
+						<img src="images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+						<span id="cart-notification" class="header-icons-noti">0</span>
+
+						<!-- Header cart noti -->
+						<div class="header-cart header-dropdown">
+							<!-- Cart items -->
+							<ul class="header-cart-wrapitem2">
+							</ul>
+
+							<!-- Cart total -->
+							<div class="header-cart-total">
+								Totals: 0 BAM
+							</div>
+
+							<div class="header-cart-buttons">
+								<div class="header-cart-wrapbtn">
+									<!-- Button -->
+									<a href="#cart" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+										View Cart
+									</a>
 								</div>
-	
-								<div class="header-cart-buttons">
-									<div class="header-cart-wrapbtn">
-										<!-- Button -->
-										<a href="#cart" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-											View Cart
-										</a>
-									</div>
-	
-									<div class="header-cart-wrapbtn">
-										<!-- Button -->
-										<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-											Check Out
-										</a>
-									</div>
+
+								<div class="header-cart-wrapbtn">
+									<!-- Button -->
+									<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+										Check Out
+									</a>
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
 
 				<button type="button" class="btn-show-menu-mobile hamburger hamburger--squeeze">
@@ -226,10 +226,10 @@
 
 					<li class="item-topbar-mobile p-l-10">
 						<div class="topbar-social-mobile">
-								<a target="_blank" href="https://www.facebook.com/Flink-1528897597158926" class="topbar-social-item fa fa-facebook"></a>
-								<a target="_blank" href="https://www.instagram.com/flink_home" class="topbar-social-item fa fa-instagram"></a>
-								<a target="_blank" href="https://www.linkedin.com/company/bsmart" class="topbar-social-item fa fa-linkedin"></a>
-								</div>
+							<a target="_blank" href="https://www.facebook.com/Flink-1528897597158926" class="topbar-social-item fa fa-facebook"></a>
+							<a target="_blank" href="https://www.instagram.com/flink_home" class="topbar-social-item fa fa-instagram"></a>
+							<a target="_blank" href="https://www.linkedin.com/company/bsmart" class="topbar-social-item fa fa-linkedin"></a>
+						</div>
 					</li>
 
 					<li class="item-menu-mobile">
@@ -520,7 +520,6 @@
 					} else {
 						$(".slick1").slick("slickPause");
 					}
-
 					/* reload 'Product' page every time with new product infromation */
 					if (index != 2) {
 						$("#product").removeClass("spapp-created");
@@ -528,10 +527,13 @@
 					} else {
 						$("#product-li").css("display", "block");
 					}
-
 					/* renew cart information on every page show */
 					if (index == 3) {
 						renewCart();
+					}
+					/* Load categories for shopping page */
+					if (index == 4) {
+						loadCategories(true);
 					}
 				}
 			});
@@ -640,6 +642,131 @@
 		});
 	</script>
 	<!--===============================================================================================-->
+	<script>
+		/* add item to cart (used on landing page and shop carts) */
+		function addSingleItemToCart(element) {
+			$(element).each(function () {
+				var productId = $(this).parent().parent().parent().find(".block2-name").attr("id");
+				var productName = $(this).parent().parent().parent().find(".block2-name").html();
+				var productPrice = $(this).parent().parent().parent().find(".block2-price").html();
+				var productPicture = $(this).parent().parent().parent().find("img").attr("src");
+				$(this).on("click", function () {
+					var productQuantity = 1;
+					swal(productName, "has been added to cart!", "success");
+					/* Add new product to cart/increase quantity of same products */
+					if (Utility.getFromSession("product_" + productId) !== null)
+						productQuantity = JSON.parse(Utility.getFromSession("product_" + productId)).quantity + 1;
+					/* product definition */
+					var product = {
+						id: productId,
+						name: productName,
+						price: productPrice,
+						picture: productPicture,
+						quantity: productQuantity
+					}
+					/* update small popup cart */
+					updatePopUpCart(product);
+					/* store new/updated cart product in session storage */
+					Utility.addToSession("product_" + productId, JSON.stringify(product));
+				});
+			});
+		}
+	</script>
+	<!--===============================================================================================-->
+	<script>
+		/* Update single cart item in the popup cart*/
+		function updatePopUpCart(product) {
+			if ($(".header-cart-wrapitem").find("#product_" + product.id).html() !== undefined) {
+				$(".header-cart-wrapitem").find("#product_" + product.id).find(".header-cart-item-info").html(product.quantity +
+					' x ' + product.price);
+			} else {
+				var html = '<li id="product_' + product.id +
+					'" class="header-cart-item"><div class="header-cart-item-img"><img src="' +
+					product.picture +
+					'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#product" class="header-cart-item-name">' + product.name +
+					'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + product.price +
+					'</span></div></li>';
+				if (Utility.getMultipleFromSession("product").length != 0) {
+					$(".header-cart-wrapitem").append(html);
+				} else {
+					$(".header-cart-wrapitem").html(html);
+				}
+			}
+			/* Update price */
+			var price = parseFloat($(".header-cart-total").html().split(" ")[1]) + parseFloat((product.price).split(" ")[0]);
+			$(".header-cart-total").html("Totals: " + price.toFixed(2) + " BAM");
+			/* Update cart counter */
+			$("#cart-notification").html(parseInt($("#cart-notification").html()) + 1);
+			//		$(".header-cart-wrapitem").append('<li class="header-cart-item"><div class="header-cart-item-img"><img src="images/item-cart-01.jpg" alt="IMG"></div><div class="header-cart-item-txt"><a href="#" class="header-cart-item-name">White Shirt With Pleat Detail Back</a><span class="header-cart-item-info">1 x $19.00</span></div></li>');
+		}
+	</script>
+		<!--===============================================================================================-->
+<script>
+		$("#filtered-product-list").on("click", "a", function () {
+			Utility.addToSession("p_id", $(this).attr("id"));
+			$("#sale-link").addClass("highlight");
+		});
+	
+		/* find items in shop based on parameters */
+		function listShopItems(category, range) {
+			/* fallback values */
+			if (range === undefined)
+				range = "all";
+			if (category === undefined || category == "All")
+				category = "all";
+			$.ajax({
+				url: "rest/v1/db/find/" + category + "/" + range,
+				method: "GET",
+				success: function (result) {
+					var html = "";
+					for (var i = 0; i < result.length; i++) {
+						/* get item status */
+						var status = "";
+						if (result[i].status == "new")
+							status = "block2-labelnew"
+						else if (result[i].status == "hot")
+							status = "block2-labelsale"
+						/* build HTML */
+						html +=
+							'<div class="col-sm-12 col-md-6 col-lg-4 p-b-50"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
+							status + '"><img src="' +
+							result[i].product_picture +
+							'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="shop-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
+							result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
+							result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i]
+							.product_price +
+							' BAM</span></div></div></div>';
+					}
+					(result.length > 1) ? $("#result-count").html("Showing " + result.length + " results."): 
+														$("#result-count").html("Showing " + result.length + " result.");
+					$("#filtered-product-list").html(html);
+					addSingleItemToCart(".shop-page-btn");
+				}
+			});
+		}
+	</script>
+	<!--===============================================================================================-->
+<script>
+		/* Load product categories for shop */
+		function loadCategories(loadItems, items) {
+			$.ajax({
+				url: "rest/v1/db/categories",
+				method: "GET",
+				success: function (result) {
+					var html =
+						'<li class="c-name p-t-4"><span class="pseudo-link active1 s-text13">All</span></li>';
+					for (var i = 0; i < result.length; i++) {
+						html += '<li class="c-name p-t-4"><span class="pseudo-link s-text13">' +
+							result[i].category_name + '</span></li>';
+					}
+					$(".category-listing").html(html);
+					if (loadItems === true)
+						listShopItems();
+				}
+			});
+		};
+	</script>
+		<!--===============================================================================================-->
 	<script src="js/page-load.js"></script>
 	<script src="js/main.js"></script>
 </body>
