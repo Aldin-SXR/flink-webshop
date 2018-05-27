@@ -1,4 +1,6 @@
 <?php
+
+use PHPMailer\PHPMailer\Exception;
 class PersistanceManager {
     private $pdo;
 	/* PDO constructor */
@@ -12,6 +14,9 @@ class PersistanceManager {
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
+	/**
+	 * Manage SHOPPING actions
+	 */
 	/* Get basic product info from database */
 	public function get_basic_product_info() {
 		$stmt = $this->pdo->query("SELECT id, product_name, product_price, product_picture, status FROM products;");
@@ -21,6 +26,12 @@ class PersistanceManager {
 	/* Get available categories from database */
 	public function get_categories() {
 		$stmt = $this->pdo->query("SELECT * FROM categories;");
+		return $stmt->fetchAll();
+	}
+
+	/* Get available countries and shipping rates from database */
+	public function get_countries_and_rates() {
+		$stmt = $this->pdo->query("SELECT * FROM countries;");
 		return $stmt->fetchAll();
 	}
 
@@ -79,6 +90,24 @@ class PersistanceManager {
 		return $stmt->fetchAll();
 	}
 
+	/* Place new product(s) order */
+	public function place_order($order) {
+		$order = json_decode($order["param"], true);
+		$order["date_of_purchase"] =  date("Y-m-d H:i:s");
+		$stmt = $this->pdo->prepare("INSERT INTO processed_orders(order_content, total_price, shipping_country, shipping_address, buyer_name, buyer_phone, date_of_purchase)
+		VALUES (:order_content, :total_price, :shipping_country, :shipping_address, :buyer_name, :buyer_phone, :date_of_purchase);");
+		try {
+			$this->pdo->query("ALTER TABLE processed_orders AUTO_INCREMENT = 1");
+			$stmt->execute($order);
+			return array("status" => "success");
+		} catch (PDOException $e) {
+			print_r($e);
+			return array("status" => "error");
+		}
+	}
+	/**
+	 * Manage USER actions
+	 */
 	public function add_new_user($user) {
 
         /* try for duplicate entities */
@@ -111,35 +140,60 @@ class PersistanceManager {
         }
 	}
 
-	    /* validate existing user */
-		public function validate_user($user) {
-			try {
-				$stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email;");
-				$stmt->execute(array(
-					"email" => $user["email"],
-				));
-				$result = $stmt->fetch();
-				/* if a user with the given email is found */
-				if ($result) {
-					/* verify activation */
-					if ($result["activated"] == 1) {
-						/* verify password */
-						if (password_verify($user["password"], $result["password"])) {
-							$result["status"] = "success";
-							return $result;
-						} else
-							return array("status" => "pass_incorrect");
-					} else {
-						return array("status" => "not_activated");
-					}
+	/* validate existing user */
+	public function validate_user($user) {
+		try {
+			$stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email;");
+			$stmt->execute(array(
+				"email" => $user["email"],
+			));
+			$result = $stmt->fetch();
+			/* if a user with the given email is found */
+			if ($result) {
+				/* verify activation */
+				if ($result["activated"] == 1) {
+					/* verify password */
+					if (password_verify($user["password"], $result["password"])) {
+						$result["status"] = "success";
+						return $result;
+					} else
+						return array("status" => "pass_incorrect");
 				} else {
-					return array("status" => "email_incorrect");
+					return array("status" => "not_activated");
 				}
-			} catch (Throwable $e) {
-				return array("status" => "error");
+			} else {
+				return array("status" => "email_incorrect");
 			}
+		} catch (Throwable $e) {
+			return array("status" => "error");
 		}
+	}
 	
-	
+	/* Save a user's cart */
+	public function save_cart($cart, $id) {
+		$stmt = $this->pdo->prepare("INSERT INTO saved_carts(cart_contents, associated_user) VALUES (:cart_contents, :associated_user)
+		ON DUPLICATE KEY UPDATE cart_contents = :new_cart_contents;");
+		try {
+			$stmt->execute(array(
+				"cart_contents" => $cart["cart"],
+				"associated_user" => $id,
+				"new_cart_contents" => $cart["cart"]
+			));
+			return array("status" => "success");
+		} catch (PDOException $e) {
+			return array("status" => "error");
+		}
+	}
+
+	/* Load user's cart */
+	public function load_cart($id) {
+		$stmt = $this->pdo->prepare("SELECT * FROM saved_carts WHERE associated_user = :associated_user;");
+		try {
+			$stmt->execute(array("associated_user" => $id));
+			return $stmt->fetch();
+		} catch (Exception $e) {	
+			return array("status" => "error");
+		}
+	}
 }
 ?>

@@ -7,6 +7,6 @@ class Config {
 		"pass" => "tanzmitmir1488",
 		"charset" => "utf8mb4"
 	);
-	const JWT_SECRET = "e+ktaj/G?2PJf;9X";
+	const JWT_SECRET = "e+ktaj/G?2dPJf;9X";
 }
 ?>

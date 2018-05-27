@@ -5,12 +5,33 @@ require_once "Config.class.php";
 require_once "InstagramScrapper.php";
 require_once "Contact.php";
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 use \Firebase\JWT\JWT;
 
 /* Register custom classes */
 Flight::register("db", "PersistanceManager", array(Config::DB));
 Flight::register("instagram", "InstagramScrapper", array("https://www.instagram.com/flink_home/"));
 Flight::register("contact", "Contact", array("aldin.kovacevic.97@gmail.com"));
+
+/**
+ * Filtering
+ */
+Flight::before("start", function(&$params, &$output) {
+    if (Flight::request()->url == "/private/db/carts") {
+        $jwt = getallheaders()["Flink-Web-Auth-JWT"];
+        try {
+            $decoded_token = (array)JWT::decode($jwt, Config::JWT_SECRET, array("HS256"));
+            $decoded_token["user"] = (array)$decoded_token["user"];
+            Flight::set("id", $decoded_token["user"]["id"]);
+        } catch (Exception $e) {
+            Flight::clear("id");
+            Flight::halt(401, Flight::json(array("status" => "unauthorized")));
+            die;
+        }
+    }
+});
 
 /* Set routes */
 Flight::route("GET /db/products", function() {
@@ -19,6 +40,10 @@ Flight::route("GET /db/products", function() {
 
 Flight::route("GET /db/categories", function() {
     Flight::json(Flight::db()->get_categories());
+});
+
+Flight::route("GET /db/countries", function() {
+    Flight::json(Flight::db()->get_countries_and_rates());
 });
 
 Flight::route("GET /db/products/@id", function($id) {
@@ -39,6 +64,16 @@ Flight::route("GET /db/coupon/@coupon", function($coupon) {
         Flight::json($coupon);
     } else {
         Flight::halt(404, Flight::json(array("status" => "Not found.")));
+    }
+});
+
+Flight::route("POST /order/new", function() {
+    $data = Flight::request()->data->getData();
+    $response = Flight::db()->place_order($data);
+    if ($response["status"] == "success") {
+        Flight::json($response);
+    } else {
+        Flight::halt(400, Flight::json($response));
     }
 });
 
@@ -63,7 +98,7 @@ Flight::route("POST /users/login", function() {
         unset($response["activation_hash"]);
         unset($response["activated"]);
         unset($response["status"]);
-        $token = array("user" => $response, "iat" => time(), "exp" => time() + 60);
+        $token = array("user" => $response, "iat" => time(), "exp" => time() + 2592000);
         $jwt = JWT::encode($token, Config::JWT_SECRET);
         $response["token"] = $jwt;
 
@@ -86,6 +121,25 @@ Flight::route("POST /contact", function() {
     }
 });
 
+Flight::route("POST /private/db/carts", function() {
+    $data = Flight::request()->data->getData();
+    $response = Flight::db()->save_cart($data, Flight::get("id"));
+    if ($response["status"] == "success") {
+        Flight::json($response);
+    } else {
+        Flight::halt(400, Flight::json($response));
+    }
+});
+
+Flight::route("GET /private/db/carts", function() {
+    $data = Flight::request()->data->getData();
+    $response = Flight::db()->load_cart(Flight::get("id"));
+    if (isset($response["status"])) {
+        Flight::halt(400, Flight::json($response));
+    } else {
+        Flight::json($response);
+    }
+});
 
 Flight::start();
 ?>
