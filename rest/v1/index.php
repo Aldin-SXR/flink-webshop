@@ -19,7 +19,8 @@ Flight::register("contact", "Contact", array("aldin.kovacevic.97@gmail.com"));
  * Filtering
  */
 Flight::before("start", function(&$params, &$output) {
-    if (Flight::request()->url == "/private/db/carts") {
+    /* authorize for all routes containing the word 'private' */
+    if (strpos(Flight::request()->url, "private") !== false) {
         $jwt = getallheaders()["Flink-Web-Auth-JWT"];
         try {
             $decoded_token = (array)JWT::decode($jwt, Config::JWT_SECRET, array("HS256"));
@@ -138,6 +139,17 @@ Flight::route("GET /private/db/carts", function() {
         Flight::halt(400, Flight::json($response));
     } else {
         Flight::json($response);
+    }
+});
+
+/* (Un)subscribe to newsletter */
+Flight::route("GET /private/subscribe", function() {
+    $data = Flight::request()->data->getData();
+    $response = Flight::db()->subscribe_to_newsletter(Flight::get("id"));
+    if ($response["status"] == "success") {
+        Flight::json($response);
+    } else {
+        Flight::halt(400, Flight::json($response));
     }
 });
 

@@ -115,10 +115,11 @@ class PersistanceManager {
             /* reset autoincrement on every try to avoid skipped indices */
             $this->pdo->query("ALTER TABLE users AUTO_INCREMENT = 1");
             /* prepare and execute the statement */
-            $stmt = $this->pdo->prepare("INSERT INTO users (user_name, email, password, country, address, zipcode, activation_hash, activated)
-                                                                VALUES (:user_name, :email, :password, :country, :address, :zipcode, :activation_hash, :activated);");
+            $stmt = $this->pdo->prepare("INSERT INTO users (superuser, user_name, email, password, country, address, zipcode, activation_hash, activated, subscribed)
+                                                                VALUES (:superuser, :user_name, :email, :password, :country, :address, :zipcode, :activation_hash, :activated, subscribed);");
 			$activation_hash = md5(((string)rand(0, 1000)).$user["email"]);
             $stmt->execute(array(
+			"superuser" => 0,
             "user_name" => $user["username"],
             "email" => $user["email"],
 			"password" => password_hash($user["password"], PASSWORD_DEFAULT),
@@ -126,7 +127,8 @@ class PersistanceManager {
 			"address" => $user["address"],
 			"zipcode" => $user["zipcode"],
             "activation_hash" => $activation_hash,
-            "activated" => 0 
+			"activated" => 0,
+			"subscribed" => 0
 			));
             /* send activation mail */
 //            Mailer::mail($user["email"], $activation_hash, $user["user_name"], $user["password"]);
@@ -192,6 +194,17 @@ class PersistanceManager {
 			$stmt->execute(array("associated_user" => $id));
 			return $stmt->fetch();
 		} catch (Exception $e) {	
+			return array("status" => "error");
+		}
+	}
+
+	/* Subscribe user to newsletter */
+	public function subscribe_to_newsletter($id) {
+		$stmt = $this->pdo->prepare("UPDATE users SET subscribed = subscribed ^ 1 WHERE id = :id");
+		try {
+			$stmt->execute(array("id" => $id));
+			return array("status" => "success");
+		} catch (PDOException $e) {
 			return array("status" => "error");
 		}
 	}

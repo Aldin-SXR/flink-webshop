@@ -38,5 +38,4 @@ class Mailer {
         $mail->Send();
     }
 }
-Mailer::mail("aldin.kovacevic.97@gmail.com", md5(rand(1, 10000)));
 ?> 
