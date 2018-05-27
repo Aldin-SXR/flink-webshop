@@ -80,6 +80,7 @@ class PersistanceManager {
 	}
 
 	public function add_new_user($user) {
+
         /* try for duplicate entities */
         try {
             /* reset autoincrement on every try to avoid skipped indices */
@@ -87,7 +88,7 @@ class PersistanceManager {
             /* prepare and execute the statement */
             $stmt = $this->pdo->prepare("INSERT INTO users (user_name, email, password, country, address, zipcode, activation_hash, activated)
                                                                 VALUES (:user_name, :email, :password, :country, :address, :zipcode, :activation_hash, :activated);");
-            $activation_hash = md5(((string)rand(0, 1000)).$user["email"]);
+			$activation_hash = md5(((string)rand(0, 1000)).$user["email"]);
             $stmt->execute(array(
             "user_name" => $user["username"],
             "email" => $user["email"],
@@ -97,11 +98,11 @@ class PersistanceManager {
 			"zipcode" => $user["zipcode"],
             "activation_hash" => $activation_hash,
             "activated" => 0 
-            ));
+			));
             /* send activation mail */
-            Mailer::mail($user["email"], $activation_hash, $user["user_name"], $user["password"]);
+//            Mailer::mail($user["email"], $activation_hash, $user["user_name"], $user["password"]);
             return array("status" => "success");
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             /* this error code signifies duplicate entry */
             if ($e->errorInfo[1] == 1062)
                 return array("status" => "duplicate");
@@ -109,6 +110,36 @@ class PersistanceManager {
                 return array("status" => "error");
         }
 	}
+
+	    /* validate existing user */
+		public function validate_user($user) {
+			try {
+				$stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email;");
+				$stmt->execute(array(
+					"email" => $user["email"],
+				));
+				$result = $stmt->fetch();
+				/* if a user with the given email is found */
+				if ($result) {
+					/* verify activation */
+					if ($result["activated"] == 1) {
+						/* verify password */
+						if (password_verify($user["password"], $result["password"])) {
+							$result["status"] = "success";
+							return $result;
+						} else
+							return array("status" => "pass_incorrect");
+					} else {
+						return array("status" => "not_activated");
+					}
+				} else {
+					return array("status" => "email_incorrect");
+				}
+			} catch (Throwable $e) {
+				return array("status" => "error");
+			}
+		}
+	
 	
 }
 ?>

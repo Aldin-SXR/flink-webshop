@@ -6,6 +6,7 @@ class Config {
 		"user" => "root",
 		"pass" => "tanzmitmir1488",
 		"charset" => "utf8mb4"
-	); 
+	);
+	const JWT_SECRET = "e+ktaj/G?2PJf;9X";
 }
 ?>
