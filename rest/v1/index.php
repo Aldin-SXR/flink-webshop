@@ -62,7 +62,11 @@ Flight::route("GET /scrape/ig", function() {
 Flight::route("GET /db/coupon/@coupon", function($coupon) {
     $coupon = Flight::db()->check_coupon($coupon);
     if ($coupon) {
-        Flight::json($coupon);
+        if ($coupon["expired"] == "1") {
+            Flight::halt(401, Flight::json(array("status" => "expired")));
+        } else {
+            Flight::json($coupon);
+        }
     } else {
         Flight::halt(404, Flight::json(array("status" => "Not found.")));
     }
@@ -150,6 +154,44 @@ Flight::route("GET /private/subscribe", function() {
         Flight::json($response);
     } else {
         Flight::halt(400, Flight::json($response));
+    }
+});
+
+/* Account activation landing page */
+Flight::route("GET /users/verify/*", function() {
+    /* check if email and hash have been properly set */
+    if (isset(Flight::request()->query["email"]) && isset(Flight::request()->query["hash"])) {
+        $result = Flight::db()->activate_user(Flight::request()->query->getData());
+        if ($result["status"] == "success") {
+            Flight::render("landing.php", array(
+                "title" => "Successful registration",
+                "status" => "<div class='card-header card-header-success text-center'>",
+                "body" => "Congratulations, your account has been successfully verified and activated. <br>
+                We thank you for your interesting in Flink products. <hr>
+                <small>Flink team</small>"
+            ));
+        } else if ($result["status"] == "already_activated") {
+            Flight::render("landing.php", array(
+                "title" => "Re-attempted activation",
+                "status" => "<div class='card-header card-header-warning text-center'>",
+                "body" => "Your account has already been previously verified and activated. <hr>
+                <small>Flink team</small>"
+            ));
+        } else if ($result["status"] == "tampered_with") {
+            Flight::render("landing.php", array(
+                "title" => "Activation code manipulation",
+                "status" => "<div class='card-header card-header-error text-center'>",
+                "body" => "Activation code is incorrect. Possible outside manipulation. <hr>
+                <small>Flink team</small>"
+            ));
+        } else if ($result["status"] == "email_incorrect") {
+            Flight::render("landing.php", array(
+                "title" => "Incorrect email address",
+                "status" => "<div class='card-header card-header-danger text-center'>",
+                "body" => "The entered email address is incorrect. Possible outside manipulation. <hr>
+                <small>Flink team</small>"
+            ));
+        }
     }
 });
 

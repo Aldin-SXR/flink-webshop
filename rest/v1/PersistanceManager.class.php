@@ -1,6 +1,7 @@
 <?php
-
 use PHPMailer\PHPMailer\Exception;
+require_once "Mailer.php";
+
 class PersistanceManager {
     private $pdo;
 	/* PDO constructor */
@@ -115,30 +116,46 @@ class PersistanceManager {
             /* reset autoincrement on every try to avoid skipped indices */
             $this->pdo->query("ALTER TABLE users AUTO_INCREMENT = 1");
             /* prepare and execute the statement */
-            $stmt = $this->pdo->prepare("INSERT INTO users (superuser, user_name, email, password, country, address, zipcode, activation_hash, activated, subscribed)
-                                                                VALUES (:superuser, :user_name, :email, :password, :country, :address, :zipcode, :activation_hash, :activated, subscribed);");
+            $stmt = $this->pdo->prepare("INSERT INTO users (superuser, user_name, email, password, real_name, phone_number, country, address, zipcode, activation_hash, activated, subscribed)
+                                                                VALUES (:superuser, :user_name, :email, :password, :real_name, :phone_number, :country, :address, :zipcode, :activation_hash, :activated, :subscribed);");
 			$activation_hash = md5(((string)rand(0, 1000)).$user["email"]);
             $stmt->execute(array(
 			"superuser" => 0,
             "user_name" => $user["username"],
             "email" => $user["email"],
 			"password" => password_hash($user["password"], PASSWORD_DEFAULT),
+			"real_name" => (trim($user["realname"]) == "") ? "not provided" : $user["realname"],
+			"phone_number" => (trim($user["phone"]) == "") ? "not provided" : $user["phone"],
 			"country" => ($user["country"] == "Select country:") ? NULL : $user["country"],
-			"address" => $user["address"],
-			"zipcode" => $user["zipcode"],
+			"address" => (trim($user["address"]) == "") ? "not provided" : $user["address"],
+			"zipcode" =>(trim($user["zipcode"]) == "") ? "not provided" : $user["zipcode"],
             "activation_hash" => $activation_hash,
 			"activated" => 0,
 			"subscribed" => 0
 			));
+			/* Activation email */
+			$activation_mail = "
+        	<h3>Thank you for registering to our Flink Web Shop</h3>
+        	<hr>As a registered user, you will enjoy a permanent <strong>5% discount</strong> on all Flink products, <br>
+        	have the ability to save your cart for later shopping, be able to rate and review our products and have an insight into
+        	our latest products and technologies via the official newsletter.<br>
+        	<p>Your account has been successfully created and you can log into the shop using your chosen credentials, <br>
+        	after you activate your account by clicking on the bottom link.</p>
+        	<hr>
+        	Flink team wishes you happy and comfortable shopping!
+        	<hr>
+        	Please click on the bottom link to activate your account:<br>
+        	http://www.flinkaj.me/webshop/rest/v1/users/verify/?email=".$user["email"]."&hash=".$activation_hash."";
             /* send activation mail */
-//            Mailer::mail($user["email"], $activation_hash, $user["user_name"], $user["password"]);
+            Mailer::mail($user["email"], "Flink Webshop account activation", $activation_mail);
             return array("status" => "success");
         } catch (PDOException $e) {
             /* this error code signifies duplicate entry */
             if ($e->errorInfo[1] == 1062)
                 return array("status" => "duplicate");
-            else 
-                return array("status" => "error");
+            else {
+				return array("status" => "error");
+			}
         }
 	}
 
@@ -166,7 +183,7 @@ class PersistanceManager {
 			} else {
 				return array("status" => "email_incorrect");
 			}
-		} catch (Throwable $e) {
+		} catch (PDOException $e) {
 			return array("status" => "error");
 		}
 	}
@@ -208,5 +225,34 @@ class PersistanceManager {
 			return array("status" => "error");
 		}
 	}
+
+	/* Activate a new user via an activaiton link */
+	public function activate_user($data) {
+        $stmt = $this->pdo->prepare("SELECT activation_hash, activated FROM users WHERE email = :email");
+        $stmt->execute(array(
+            "email" => $data["email"]
+        ));
+        $result = $stmt->fetch();
+        /* if a user is found */
+        if ($result) {
+            if ($result["activated"] == 1)
+                return array("status" => "already_activated");
+            else {
+                /* account is not activated; check if has is valid */
+                if ($result["activation_hash"] == $data["hash"]) {
+                    /* update activated status */
+                    $stmt = $this->pdo->prepare("UPDATE users SET activated = :activated WHERE email = :email");
+                    $stmt->execute(array(
+                        "activated" => 1,
+                        "email" => $data["email"]
+                    ));
+                    return array("status" => "success");
+                } else
+                    return array("status" => "tampered_with");
+            }
+        } else {
+            return array("status" => "email_incorrect");
+        }
+    }
 }
 ?>
