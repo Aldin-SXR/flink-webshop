@@ -5,9 +5,23 @@ var Utility = {
             window.localStorage.removeItem(key);
         })
     },
+    /* add to local storage */
+    addToStorage: function(key, value) {
+        window.localStorage.setItem(key, value);
+    },
+    /* Get value from local storage */ 
+    getFromStorage: function(key) {
+        return window.localStorage.getItem(key);
+    },
     /* remove an item from local storage */
     removeFromStorage: function(key) {
         window.localStorage.removeItem(key);
+    },
+    /* clear session storage */
+    clearSession: function() {
+        $.each(window.sessionStorage, function(key, value) {
+            window.sessionStorage.removeItem(key);
+        })
     },
     /* add to session storage */
     addToSession: function(key, value) {

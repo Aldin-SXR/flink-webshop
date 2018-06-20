@@ -21,7 +21,7 @@
         <div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
             <div class="flex-w flex-m w-full-sm">
                 <div class="size11 bo4 m-r-10">
-                    <input id="enter-coupon" class="sizefull s-text7 p-l-22 p-r-22" type="text" name="coupon-code" placeholder="Coupon Code">
+                    <input id="enter-coupon" class="sizefull s-text7 p-l-22 p-r-22" type="text" name="coupon-code" placeholder="Enter a coupon code:">
                 </div>
 
                 <div class="size12 trans-0-4 m-t-10 m-b-10 m-r-10">
@@ -53,50 +53,60 @@
                 </span>
 
                 <span id="cart-subtotals" class="m-text21 w-size20 w-full-sm">
-                    BAM
+                    0.00 BAM
                 </span>
             </div>
 
             <!--  -->
             <div class="flex-w flex-sb bo10 p-t-15 p-b-20">
                 <span class="s-text18 w-size19 w-full-sm">
-                    Shipping:
+                    Shipping fees:
                 </span>
 
                 <div class="w-size20 w-full-sm">
                     <p class="s-text8 p-b-23">
-                        There are no shipping methods available. Please double check your address, or contact us if you need any help.
+                        Please choose your country so we can calculate your shipping fee.
                     </p>
 
                     <span class="s-text19">
                         Calculate Shipping
                     </span>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
+                                <select id="country-selection" class="selection-2" name="country">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="m-text21 w-size20 w-full-sm w-size21 m-r-auto m-t-12 m-b-12">
+                                <p id="country-fee" class="lead">0.00 BAM</p>
+                            </div>
 
-                    <div class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
-                        <select class="selection-2" name="country">
-                            <option>Select a country...</option>
-                            <option>US</option>
-                            <option>UK</option>
-                            <option>Japan</option>
-                        </select>
+                        </div>
                     </div>
-
-                    <div class="size13 bo4 m-b-12">
-                        <input class="sizefull s-text7 p-l-15 p-r-15" type="text" name="state" placeholder="State /  country">
-                    </div>
-
-                    <div class="size13 bo4 m-b-22">
-                        <input class="sizefull s-text7 p-l-15 p-r-15" type="text" name="postcode" placeholder="Postcode / Zip">
-                    </div>
-
                     <div class="size14 trans-0-4 m-b-10">
                         <!-- Button -->
-                        <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+                        <button id="update-totals" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
                             Update Totals
                         </button>
                     </div>
                 </div>
             </div>
+            <!-- Shipping address -->
+            <!--      <div class="flex-w flex-sb bo16 p-t-15 p-b-20">
+                <span class="s-text18 w-size19 w-full-sm">
+                    Shipping:
+                </span>
+                <div class="size13 bo4 m-b-12">
+                    <input class="sizefull s-text7 p-l-15 p-r-15" type="text" name="state" placeholder="State /  country">
+                </div>
+
+                <div class="size13 bo4 m-b-22">
+                    <input class="sizefull s-text7 p-l-15 p-r-15" type="text" name="postcode" placeholder="Postcode / Zip">
+                </div>
+
+            </div> -->
 
             <!--  -->
             <div class="flex-w flex-sb-m p-t-26 p-b-30">
@@ -104,33 +114,32 @@
                     Total:
                 </span>
 
-                <span class="m-text21 w-size20 w-full-sm">
-                    $39.00
+                <span id="total-price" class="m-text21 w-size20 w-full-sm">
+                    0.00 BAM
                 </span>
             </div>
 
             <div class="size15 trans-0-4">
                 <!-- Button -->
-                <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+                <button data-toggle="modal" data-target="#checkout-overlay" id="proceed-to-checkout" class="disabled flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
                     Proceed to Checkout
                 </button>
             </div>
         </div>
     </div>
 </section>
-<!--===============================================================================================-->
-<script src="js/main.js"></script>
+<div id="dropDownSelect3"></div>
 <!--===============================================================================================-->
 <script type="text/javascript" src="vendor/select2/select2.min.js"></script>
 <script type="text/javascript">
-    $(".selection-2").select2({
-        minimumResultsForSearch: 20,
-        dropdownParent: $('#dropDownSelect1')
+    $("#country-selection").select2({
+        minimumResultsForSearch: 20
     });
 </script>
 <!--===============================================================================================-->
 <script>
     $(document).ready(function () {
+        /*apply coupon on page reload */
         if (Utility.getFromSession("appl_c")) {
             $("#apply-coupon-button").prop("disabled", true);
             $("#apply-coupon-button").addClass("disabled");
@@ -143,6 +152,7 @@
 </script>
 <!--===============================================================================================-->
 <script>
+    /* Handler for add to/remove from cart buttons */
     $(".table-shopping-cart").on("click", ".btn-num-product-down", function (e) {
         e.preventDefault();
         var numProduct = Number($(this).next().val());
@@ -199,6 +209,8 @@
             /* check for applied coupon */
             var coupon = (Utility.getFromSession("appl_c")) ? parseFloat(Utility.getFromSession("appl_c")) : 0;
             $("#cart-subtotals").html((price - (price * coupon)).toFixed(2) + " BAM");
+            $("#total-price").html((price - (price * coupon) + parseFloat($("#country-selection :selected").attr(
+                "value"))).toFixed(2) + " BAM");
         } else {
             swal("Your cart", "is empty! Try adding something to it.", "error");
         }
@@ -216,22 +228,338 @@
                     /* disable button and clear input */
                     $("#apply-coupon-button").prop("disabled", true);
                     $("#apply-coupon-button").addClass("disabled");
-                    $("#apply-coupon-button").html(parseInt(100 *  result.discount_rate) + "% discount");
+                    $("#apply-coupon-button").html(parseInt(100 * result.discount_rate) +
+                        "% discount");
                     $("#enter-coupon").val("");
                     $("#enter-coupon").blur();
                     $("#enter-coupon").attr("placeholder", "Coupon has been applied.");
-                    $("#cart-subtotals").html(parseFloat($("#cart-subtotals").html().split(" ")[0]) -
-                        parseFloat($("#cart-subtotals").html().split(" ")[0] * result.discount_rate) +
+                    /* update cart subtotals and totals */
+                    $("#cart-subtotals").html(parseFloat(parseFloat($("#cart-subtotals").html().split(
+                                " ")[0]) -
+                            parseFloat($("#cart-subtotals").html().split(" ")[0] * result.discount_rate)
+                        ).toFixed(2) +
+                        " BAM");
+                    $("#total-price").html(parseFloat(parseFloat($("#cart-subtotals").html().split(
+                                " ")[0]) +
+                            parseFloat($("#country-selection :selected").attr("value"))).toFixed(
+                            2) +
                         " BAM");
                     swal(result.discount_rate * 100 + "% discount coupon", "has been applied.",
                         "success");
                 },
-                error: function () {
-                    swal("Invalid coupon", "has been entered.", "error");
+                error: function (response) {
+                    if (response.responseJSON.status == "expired") {
+                        swal("Expired coupon!", "This coupon is no longer valid.", "error");
+                    } else {
+                        swal("Invalid coupon", "has been entered.", "error");
+                    }
                 }
             });
         } else {
-            swal("Invalid operation.", "You cannot apply a coupon to an empty cart.", "error    ");
+            swal("Invalid operation.", "You cannot apply a coupon to an empty cart.", "error");
         }
     });
 </script>
+<!--===============================================================================================-->
+<script>
+    /* Get all countries where the store ships to */
+    $(document).ready(function () {
+        $.ajax({
+            url: "rest/v1/db/countries",
+            method: "GET",
+            success: function (result) {
+                var html = '<option value="0.00">Select a country</option>';
+                /* handle for previous country selection */
+                var isSelected = "";
+                var country = Utility.getFromSession("p_shp");
+                for (var i = 0; i < result.length; i++) {
+                    var selected = (result[i].country_name == country) ? "selected" : "";
+                    html += '<option ' + selected + ' value="' + result[i].shipping_rate + '">' +
+                        result[i].country_name +
+                        '</option>';
+                }
+                $("#country-selection").html(html);
+            },
+            /* change shipping price based on selected country */
+            complete: function () {
+                $("#country-fee").html(parseFloat($("#country-selection :selected").attr("value")).toFixed(
+                        2) +
+                    " BAM");
+                $("#country-selection").on("change", function () {
+                    $("#country-fee").html($("#country-selection :selected").attr("value") +
+                        " BAM");
+                });
+            }
+        });
+    });
+</script>
+<!--===============================================================================================-->
+<script>
+    /* Update totals (subtotals + shipping fee) */
+    $("#update-totals").on("click", function () {
+        if ($("#country-selection :selected").html() != "Select a country") {
+            $("#proceed-to-checkout").removeClass("disabled");
+            Utility.addToSession("p_shp", $("#country-selection :selected").html());
+            Utility.addToSession("p_prc", parseFloat($("#country-selection :selected").attr("value")));
+            $("#total-price").html((parseFloat($("#cart-subtotals").html().split(" ")[0]) + parseFloat($(
+                "#country-selection :selected").attr("value"))).toFixed(2) + " BAM");
+            swal("Totals updated!", "Successfully updated total price.", "success");
+        } else {
+            swal("Incorrect selection!", "You must select a proper country.", "error");
+        }
+    });
+</script>
+<!--===============================================================================================-->
+<script>
+    /* Proceed to checkout procedure */
+    $("#proceed-to-checkout").on("click", function () {
+        /* checking if there are any products in the cart */
+        if (Utility.getMultipleFromSession("product").length != 0) {
+            /* checking if shipping fee has been chosen */
+            if (Utility.getFromSession("p_shp")) {
+                var products = Utility.getMultipleFromSession("product");
+                var product_html = "";
+                for (var i = 0; i < products.length; i++) {
+                    /* List products in the checklist */
+                    var product = JSON.parse(products[i]);
+                    if (i == products.length - 1)
+                        product_html += product.quantity + " x " + product.name;
+                    else
+                        product_html += product.quantity + " x " + product.name + ", ";
+                }
+
+                /* Fill the 'Order details' screen */
+                $("#checkout-items").html(product_html);
+                $("#shipping-location").html(Utility.getFromSession("p_shp"));
+                $("#shipping-fee").html(parseFloat(Utility.getFromSession("p_prc")).toFixed(2) + " BAM");
+                $("#subtotals-fee").html($("#cart-subtotals").html());
+                $("#discount-percent").html((Utility.getFromSession("appl_c")) ? parseFloat(Utility.getFromSession(
+                    "appl_c")) * 100 + "%" : "none");
+                $("#totals-fee").html($("#total-price").html());
+                /* show order modal */
+
+            } else {
+                swal("No shipping country", "You have not selected a shipping country.", "error");
+            }
+        } else {
+            swal("Empty cart!", "You cannot proceed to checkout with an empty cart.", "error");
+        }
+    });
+</script>
+<!--===============================================================================================-->
+<script>
+    var buyerEdit =
+        '<div class="card bg-light p-3"> <div class="card-body"> <div class="card-title"> <p class="lead highlight"> Buyer details </p></div><form id="buyer-details"> <div class="row"> <div class="col-sm-12"> <div class="form-group"> <label for="buyername" class="control-label"> <em>Name and surname: *</em> </label> <input type="text" class="form-control" id="buyername" name="buyername" value="" required="" title="Please enter your name and surname"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-12"> <div class="form-group"> <label for="buyerphone" class="control-label"> <em>Phone number:</em> </label> <input type="text" class="form-control" id="buyerphone" name="buyerphone" value="" title="Please enter your phone number"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-12"> <div class="form-group"> <label for="buyeraddress" class="control-label"> <em>Shipping address (street & city): *</em> </label> <input type="text" class="form-control" id="buyeraddress" name="buyeraddress" value="" required="" title="Please enter your shipping address"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-12"> <div class="form-group"> <label for="buyerzipcode" class="control-label"> <em>Zipcode: *</em> </label> <input type="number" class="form-control" id="buyerzipcode" name="buyerzipcode" value="" required="" title="Please enter you zipcode"> <span class="help-block"></span> </div></div></div><div class="row"> <span class="btn btn-default btn-block"> <small>Fields marked with an asterisk(*) are mandatory.</small> </span> </div><button type="submit" id="save-buyer-details" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Save details</button> </form> </div></div>';
+
+    $("#dynamic-checkout").on("click", "#update-buyer-details", function () {
+        $("#dynamic-checkout").html(buyerEdit);
+        /* If a guest user has previously entered his/her data */
+        if (Utility.getFromSession("temp_usr")) {
+            var user = JSON.parse(Utility.getFromSession("temp_usr"));
+            $("#buyername").val(user.name);
+            $("#buyerphone").val(user.phone);
+            $("#buyeraddress").val(user.address);
+            $("#buyerzipcode").val(user.zipcode);
+        } else if (Utility.getFromStorage("ath_usr")) {
+            var user = JSON.parse(Utility.getFromStorage("ath_usr"));
+            $("#buyername").val(user.real_name);
+            $("#buyerphone").val(user.phone_number);
+            $("#buyeraddress").val(user.address);
+            $("#buyerzipcode").val(user.zipcode);
+        }
+        validateBuyer();
+    });
+
+    $("#checkout-modal").ready(function () {
+        $("#dynamic-checkout").html(buyerOverview());
+    });
+
+    $("#checkout-overlay").on("hidden.bs.modal", function () {
+        $("#dynamic-checkout").html(buyerOverview());
+    });
+
+    /* Validate buyer data */
+    function validateBuyer() {
+        $("#buyer-details").validate({
+            rules: {
+                buyername: {
+                    required: true
+                }
+            },
+            messages: {
+                buyername: {
+                    required: "You must enter your full name."
+                }
+            },
+            submitHandler: function (form) {
+                var buyer = {
+                    name: $("#buyername").val(),
+                    phone: ($("#buyerphone").val() == "") ? "not provided" : $("#buyerphone").val(),
+                    address: $("#buyeraddress").val(),
+                    zipcode: $("#buyerzipcode").val()
+                }
+                Utility.addToSession("temp_usr", JSON.stringify(buyer));
+                $("#dynamic-checkout").html(buyerOverview());
+            }
+        });
+    }
+
+    function buyerOverview() {
+        if (Utility.getFromSession("temp_usr")) {
+            var user = JSON.parse(Utility.getFromSession("temp_usr"));
+            var buyerName = user.name;
+            var buyerPhone = user.phone;
+            var buyerAddress = user.address;
+            var buyerZipcode = user.zipcode;
+        } else if (Utility.getFromStorage("ath_usr")) {
+            var user = JSON.parse(Utility.getFromStorage("ath_usr"));
+            var buyerName = user.real_name;
+            var buyerPhone = user.phone_number;
+            var buyerAddress = user.address;
+            var buyerZipcode = user.zipcode;
+        } else {
+            var buyerName = buyerPhone = buyerAddress = buyerZipcode = "not provided";
+        }
+        var buyerOverview =
+            '<div class="card bg-light p-3"> <div class="card-body"> <div class="card-title"> <p class="lead highlight"> Buyer details </p></div><ul class="list-unstyled" style="line-height: 2"> <li> <span class="fa fa-user highlight"></span> <strong> Name and surname: </strong> <span id="name-li">' +
+            buyerName +
+            '</span> </li><li> <span class="fa fa-phone highlight"></span> <strong> Phone number: </strong> <span id="phone-number-li">' +
+            buyerPhone +
+            '</span> </li><li> <hr> <span class="fa fa-map-marker highlight"></span> <strong> Shipping address: </strong> <span id="address-li">' +
+            buyerAddress +
+            '</span> </li><li> <span class="fa fa-envelope highlight"></span> <strong> Zipcode: </strong> <span id="zipcode-li">' +
+            buyerZipcode +
+            '</span> </li></ul> <p> <span id="update-buyer-details" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Update details</span> </p></div></div>';
+        return buyerOverview;
+    }
+</script>
+<!--===============================================================================================-->
+<script>
+    $("#payment-redirect").on("click", function () {
+        /* If there are no proper user credentials */
+        if (!Utility.getFromStorage("ath_usr") && !Utility.getFromSession("temp_usr")) {
+            swal("Invalid checkout data!", "You have not provided appropriate buyer information.", "error");
+        } else {
+            if ($("#address-li").html() == "not provided" || $("#zipcode-li").html() == "not provided" || $(
+                    "#name-li").html() == "not provided") {
+                swal("Invalid checkout data!", "You have not provided appropriate buyer information.", "error");
+            } else {
+                /* Generate bought product info */
+                var orderedProducts = [];
+                var products = Utility.getMultipleFromSession("product");
+                for (var i = 0; i < products.length; i++) {
+                    var product = JSON.parse(products[i]);
+                    orderedProducts[i] = {
+                        product_id: product.id,
+                        product_quantity: product.quantity
+                    }
+                }
+                /* put everything into one order object */
+                var order = {
+                    order_content: JSON.stringify(orderedProducts),
+                    total_price: $("#totals-fee").html().split(" ")[0],
+                    shipping_country: $("#shipping-location").html(),
+                    shipping_address: $("#address-li").html() + ", " + $("#zipcode-li").html(),
+                    buyer_name: $("#name-li").html(),
+                    buyer_phone: $("#phone-number-li").html()
+                }
+
+                /* send order to server */
+                $.ajax({
+                    url: "rest/v1/order/new",
+                    method: "POST",
+                    data: {
+                        param: JSON.stringify(order)
+                    },
+                    dataType: "json",
+                    success: function () {
+                        swal("Successful order!",
+                            "You have successfully placed your order. Thank you for choosing our products.",
+                            "success").then(e => {
+                            /* clear cart data because a purchase has been made */
+                            Utility.clearSession();
+                            $("#proceed-to-checkout").addClass("disabled");
+                            $("#checkout-overlay").modal("hide");
+                            renewCart();
+                            renewPopUpCart();
+                            window.location = "#landing";
+                        });
+                    }
+                });
+            }
+        }
+    });
+</script>
+<!--===============================================================================================-->
+<!-- Log in/sign up modal -->
+<div id="checkout-overlay" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="checkout-label">Checkout</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <!-- Dynamically loaded modal body -->
+            <div id="checkout-modal" class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card bg-light p-3">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <p class="lead highlight">Order details</p>
+                                </div>
+                                <ul class="list-unstyled" style="line-height: 2">
+                                    <li>
+                                        <span class="fa fa-shopping-cart highlight"></span>
+                                        <strong> Items: </strong>
+                                        <span id="checkout-items"></span>
+                                    </li>
+
+                                    <li>
+                                        <span class="fa fa-globe highlight"></span>
+                                        <strong> Shipping location: </strong>
+                                        <span id="shipping-location"></span>
+                                    </li>
+                                    <li>
+                                        <hr>
+                                        <span class="fa fa-percent highlight"></span>
+                                        <strong> Discount: </strong>
+                                        <span id="discount-percent"></span>
+                                    </li>
+                                    <li>
+                                        <span class="fa fa-money highlight"></span>
+                                        <strong> Subtotals: </strong>
+                                        <span id="subtotals-fee"></span>
+                                    </li>
+                                    <li>
+                                        <span class="fa fa-money highlight"></span>
+                                        <strong> Shipping fee: </strong>
+                                        <span id="shipping-fee"></span>
+                                    </li>
+                                    <li>
+                                        <hr>
+                                        <span class="fa fa-usd highlight"></span>
+                                        <strong> TOTALS: </strong>
+                                        <span id="totals-fee"></span>
+                                    </li>
+                                </ul>
+                                <p>
+                                    <span id="payment-redirect" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Proceed to payment</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dynamic see/edit buyer details -->
+                    <div class="col-sm-6" id="dynamic-checkout">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>

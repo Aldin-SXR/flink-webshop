@@ -118,10 +118,8 @@
         </div>
     </div>
 </div>
-
-
-<!-- Relate Product -->
-<section class="relateproduct bgwhite p-t-45 p-b-138">
+<!-- Related Products (TODO) -->
+<!-- <section class="relateproduct bgwhite p-t-45 p-b-138">
     <div class="container">
         <div class="sec-title p-b-60">
             <h3 class="m-text5 t-center">
@@ -129,12 +127,11 @@
             </h3>
         </div>
     </div>
-</section>
+</section> -->
 <!--===============================================================================================-->
 <script type="text/javascript" src="vendor/slick/slick.min.js"></script>
 <script type="text/javascript" src="js/slick-custom.js"></script>
 <!--===============================================================================================-->
-<script src="js/main.js"></script>
 <script src="js/utility.js"></script>
 <!--===============================================================================================-->
 <script>
@@ -144,4 +141,16 @@
 </script>
 <!--===============================================================================================-->
 <script>
+    /* Handles +/- button clicking */
+    $(".btn-num-product-down").on("click", function (e) {
+        e.preventDefault();
+        var numProduct = Number($(this).next().val());
+        if (numProduct > 1) $(this).next().val(numProduct - 1);
+    });
+
+    $(".btn-num-product-up").on("click", function (e) {
+        e.preventDefault();
+        var numProduct = Number($(this).prev().val());
+        $(this).prev().val(numProduct + 1);
+    });
 </script>

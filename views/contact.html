@@ -22,22 +22,22 @@
 						</h4>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Full Name">
+							<input id="full-name" class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Full name">
 						</div>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="phone-number" placeholder="Phone Number">
+							<input id="phone-number" class="sizefull s-text7 p-l-22 p-r-22" type="text" name="phone-number" placeholder="Phone number">
 						</div>
 
 						<div class="bo4 of-hidden size15 m-b-20">
-							<input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="email" placeholder="Email Address">
+							<input id="email-address" class="sizefull s-text7 p-l-22 p-r-22" type="text" name="email" placeholder="Email address">
 						</div>
 
-						<textarea class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="message" placeholder="Message"></textarea>
+						<textarea id="message-area" class="dis-block s-text7 size20 bo4 p-l-22 p-r-22 p-t-13 m-b-20" name="message" placeholder="Message"></textarea>
 
 						<div class="w-size25">
 							<!-- Button -->
-							<button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+							<button id="send-contact-form" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
 								Send
 							</button>
 						</div>
@@ -48,3 +48,23 @@
     </section>
     <!--===============================================================================================-->
 	<script src="js/map-custom.js"></script>
+	<!--===============================================================================================-->
+	<script>
+		$("#send-contact-form").on("click", function(e) {
+			e.preventDefault();
+			$.ajax({
+				url: "rest/v1/contact",
+				method: "POST",
+				data: $("#full-name, #phone-number, #email-address, #message-area").serialize(),
+				success: function() {
+					swal("Message sent!", "Thank you for contacting us. We will get back to you soon.", "success");
+				},
+				error: function() {
+					swal("Sending failed!", "You did not provide appropriate contact information.", "error");
+				},
+				complete: function() {
+					$("#full-name, #phone-number, #email-address, #message-area").val("");
+				}
+			});
+		});
+	</script>

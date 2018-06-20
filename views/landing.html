@@ -73,9 +73,13 @@
 <section class="banner bgwhite p-t-40 p-b-40">
 	<div class="container">
 		<!-- Category listing -->
+		<div class="sec-title p-b-60">
+			<h3 class="m-text5 t-center">
+				Product Categories </h3>
+		</div>
 		<div id="category-list" class="row">
 			<div class="col-sm-10 col-md-8 col-lg-4">
-				<div class="block2 wrap-pic-w pos-relative m-b-30">
+				<div id="sign-up-banner" class="block2 wrap-pic-w pos-relative m-b-30">
 					<img src="images/icons/bg-01.jpg" alt="IMG">
 					<div class="block2-content sizefull ab-t-l flex-col-c-m">
 						<h4 class="m-text4 t-center w-size3 p-b-8">
@@ -88,9 +92,9 @@
 
 						<div class="w-size2 p-t-25">
 							<!-- Button -->
-							<a href="#" class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
+							<span id="sign-up-banner-button" class="pseudo-span flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
 								Sign Up
-							</a>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -247,14 +251,17 @@
 						status = "block2-labelnew"
 					else if (result[i].status == "hot")
 						status = "block2-labelsale"
+					/* check for registered user discount */
+					var userDiscount = (Utility.getFromStorage("ath_usr")) ? 0.05 : 0;
 					/* build HTML */
 					html +=
 						'<div class="item-slick2 p-l-15 p-r-15"><div class="block2"><div class="block2-img wrap-pic-w wrap-pic-h of-hidden pos-relative ' +
 						status + '"><img src="' +
 						result[i].product_picture +
-						'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="landing-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
+						'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"></a><div class="landing-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
 						result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
-						result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i].product_price +
+						result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + (parseFloat(result[i]
+							.product_price) - parseFloat(result[i].product_price) * userDiscount).toFixed(2) +
 						' BAM</span></div></div></div>';
 				}
 				$(".slick2").slick("slickAdd", html);
@@ -275,7 +282,7 @@
 				for (var i = 0; i < result.length; i++) {
 					/* build HTML (could use m-l-r-auto) */
 					html +=
-						'<div class="col-sm-10 col-md-8 col-lg-4"><div class="block1 hov-img-zoom pos-relative m-b-30"><img src="images/banner-05.jpg" alt="IMG-BENNER"><div class="block1-wrapbtn w-size2"><a href="#shop" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">' +
+						'<div class="col-sm-10 col-md-8 col-lg-4"><div class="block1 hov-img-zoom pos-relative m-b-30"><img src="' + result[i].category_picture + '" alt="IMG-BENNER"><div class="block1-wrapbtn w-size2"><a href="#shop" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">' +
 						result[i].category_name + '</a></div></div></div>';
 				}
 				$("#category-list").prepend(html);

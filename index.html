@@ -59,7 +59,7 @@
 						<img src="images/icons/icon-header-01.png" class="header-icon1" alt="ICON">
 					</a>
 					<span class="linedivide1"></span>
-					<div class="header-wrapicon2">
+					<div title="Cart" class="header-wrapicon2">
 						<img src="images/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
 						<span id="cart-notification" class="header-icons-noti">0</span>
 
@@ -75,19 +75,10 @@
 							</div>
 
 							<div class="header-cart-buttons">
-								<div class="header-cart-wrapbtn">
-									<!-- Button -->
-									<a href="#cart" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-										View Cart
-									</a>
-								</div>
-
-								<div class="header-cart-wrapbtn">
-									<!-- Button -->
-									<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-										Check Out
-									</a>
-								</div>
+								<!-- Button -->
+								<a href="#cart" class="popup-cart-button flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+									Proceed to Cart
+								</a>
 							</div>
 						</div>
 					</div>
@@ -120,6 +111,9 @@
 							<li>
 								<a id="contact-link" href="#contact">Contact</a>
 							</li>
+							<li>
+									<a id="logout" href="#">Log out</a>
+								</li>
 						</ul>
 					</nav>
 				</div>
@@ -167,28 +161,19 @@
 						<!-- Header cart noti -->
 						<div class="header-cart header-dropdown">
 							<!-- Cart items -->
-							<ul class="header-cart-wrapitem2">
+							<ul class="header-cart-wrapitem-mobile">
 							</ul>
 
 							<!-- Cart total -->
 							<div class="header-cart-total">
-								Totals: 0 BAM
+								Totals: 0.00 BAM
 							</div>
 
 							<div class="header-cart-buttons">
-								<div class="header-cart-wrapbtn">
-									<!-- Button -->
-									<a href="#cart" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-										View Cart
-									</a>
-								</div>
-
-								<div class="header-cart-wrapbtn">
-									<!-- Button -->
-									<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-										Check Out
-									</a>
-								</div>
+								<!-- Button -->
+								<a href="#cart" class="popup-cart-button flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
+									Proceed to Cart
+								</a>
 							</div>
 						</div>
 					</div>
@@ -208,7 +193,7 @@
 				<ul class="main-menu">
 					<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
 						<span class="topbar-child1">
-							Free shipping for standard order over $100
+							A young team with a smart vision
 						</span>
 					</li>
 
@@ -236,8 +221,8 @@
 						<a href="#shop">Shop</a>
 					</li>
 
-					<li class="item-menu-mobile">
-						<a href="#product">Sale</a>
+					<li id="product-li-mobile" style="display: none;" class="item-menu-mobile">
+						<a href="#product">Product</a>
 					</li>
 
 					<li class="item-menu-mobile">
@@ -251,6 +236,9 @@
 					<li class="item-menu-mobile">
 						<a href="#contact">Contact</a>
 					</li>
+					<li id="logout" class="item-menu-mobile">
+							<a href="">Log out</a>
+						</li>
 				</ul>
 			</nav>
 		</div>
@@ -349,23 +337,23 @@
 
 				<div class="w-size8 p-t-30 p-l-15 p-r-15 respon6 m-l-auto">
 					<h4 class="s-text12 p-b-30">
-						Newsletter
+						Our apps
 					</h4>
 
-					<form>
-						<div class="effect1 w-size9">
-							<input class="s-text7 bg6 w-full p-b-5" type="text" name="email" placeholder="email@example.com">
-							<span class="effect1-line"></span>
-						</div>
+					<ul>
+						<li class="p-b-9">
+							<a href="https://play.google.com/store/apps/details?id=enver.flinkhomev1" class="s-text7">
+								<i class="fa fa-android"></i> Android
+							</a>
+						</li>
 
-						<div class="w-size2 p-t-20">
-							<!-- Button -->
-							<button class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
-								Subscribe
-							</button>
-						</div>
+						<li class="p-b-9">
 
-					</form>
+							<a href="https://itunes.apple.com/au/app/flink-home/id1353775850?mt=8" class="s-text7">
+								<i class="fa fa-apple"></i> iOS
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 
@@ -391,9 +379,9 @@
 				</a>
 
 				<div class="t-center s-text8 p-t-20">
-					flink &#174 2018 | This template is made with
-					<i class="fa fa-heart-o" aria-hidden="true"></i> by
-					<a href="https://colorlib.com" target="_blank">Colorlib</a>
+					flink &#174 2018 | Made with
+					<i class="fa fa-heart-o" aria-hidden="true"></i> (and quite a bit of sweat) by
+					<a href="https://www.linkedin.com/in/aldin-kovacevic/" target="_blank"> Aldin Kovačević</a>
 				</div>
 			</div>
 		</footer>
@@ -406,12 +394,6 @@
 			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
 		</span>
 	</div>
-
-	<!-- Container Selection1 -->
-	<div id="dropDownSelect1"></div>
-
-
-
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
@@ -419,15 +401,11 @@
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/bootstrap/js/popper.js"></script>
 	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/select2/select2.min.js"></script>
-	<script type="text/javascript">
-		$(".selection-1").select2({
-			minimumResultsForSearch: 20,
-			dropdownParent: $('#dropDownSelect1')
-		});
-	</script>
+	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/noui/nouislider.min.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/lightbox2/js/lightbox.min.js"></script>
@@ -441,13 +419,9 @@
 	<script src="js/utility.js"></script>
 	<!--===============================================================================================-->
 	<script type="text/javascript" src="vendor/slick/slick.min.js"></script>
+	<!--===============================================================================================-->
 	<script type="text/javascript" src="js/slick-custom.js"></script>
 	<!--===============================================================================================-->
-	<script>
-		$(document).ready(function () {
-			$("#login-overlay").modal("hide");
-		});
-	</script>
 	<script type="text/javascript">
 		var app = $.spapp({
 			defaultView: "#landing",
@@ -459,6 +433,16 @@
 				view: name,
 				load: name + ".html",
 				onCreate: function (e) {
+					if (Utility.getFromStorage("ath_usr")) {
+						$("#logout").css("display", "block");
+						/* Repull products if user leaves and comes back from the browser */
+						if (Utility.getMultipleFromSession("product").length == 0) {
+							loadUserCart();
+							setTimeout(function() {renewPopUpCart(); }, 200);
+						}
+					} else {
+						$("#logout").css("display", "none");
+					}
 					renewPopUpCart();
 				},
 				onReady: function (e) {
@@ -466,23 +450,32 @@
 					$(".wrap-side-menu").slideUp();
 					$("#" + name + "-link").closest("ul").find("li").removeClass("sale-noti");
 					$("#" + name + "-link").closest("li").addClass("sale-noti");
+					window.scrollTo(0, 0);
 
 					if (index == 0) {
 						/* turn on carousel when on landing page */
 						setTimeout(function () {
 							$(".slick1")[0].slick.setPosition();
+							$(".slick2")[0].slick.setPosition();
 							$(".slick1").slick("slickPlay");
-							//		$(".slick1").slick("refresh");
+							$(".slick2").slick("slickPlay");
 						}, 100);
+						/* Hide sign up banner */
+						if (Utility.getFromStorage("ath_usr")) {
+							$("#sign-up-banner").css("display", "none");
+						}
 					} else {
 						$(".slick1").slick("slickPause");
+						$(".slick2").slick("slickPause");
 					}
 					/* reload 'Product' page every time with new product infromation */
 					if (index != 2) {
 						$("#product").removeClass("spapp-created");
 						$("#product-li").css("display", "none");
+						$("#product-li-mobile").css("display", "none");
 					} else {
 						$("#product-li").css("display", "block");
+						$("#product-li-mobile").css("display", "block");
 					}
 					/* renew cart information on every page show */
 					if (index == 3) {
@@ -495,9 +488,7 @@
 					/* Remove category information if not on product page */
 					if (index != 2 && index != 4) {
 						Utility.removeFromSession("p_cat");
-
-						//			$("#value-lower").html("0");
-						//			$("#value-upper").html("200");
+						Utility.removeFromSession("p_range");
 					}
 				}
 			});
@@ -519,7 +510,8 @@
 						product.picture +
 						'" alt="IMG"></div><div class="header-cart-item-txt"><a href="#product" class="header-cart-item-name">' + product
 						.name +
-						'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + product.price +
+						'</a><span class="header-cart-item-info">' + product.quantity + ' x ' + parseFloat(product.price.split(" ")[0]).toFixed(
+							2) + " BAM" +
 						'</span></div></li>'
 					price += parseFloat((product.price).split(" ")[0]) * parseInt(product.quantity);
 					notifications += product.quantity;
@@ -529,7 +521,7 @@
 				$("#cart-notification").html(notifications);
 			} else {
 				$(".header-cart-wrapitem").html("<p class='lead'>Your cart is currently empty.</p>");
-				$(".header-cart-total").html("Totals: 0 BAM");
+				$(".header-cart-total").html("Totals: 0.00 BAM");
 				$("#cart-notification").html("0");
 			}
 		}
@@ -561,12 +553,21 @@
 				$(".table-shopping-cart").html(html);
 				var coupon = (Utility.getFromSession("appl_c")) ? parseFloat(Utility.getFromSession("appl_c")) : 0;
 				$("#cart-subtotals").html((price - (price * coupon)).toFixed(2) + " BAM");
+				var shipping = (Utility.getFromSession("p_prc")) ? parseFloat(Utility.getFromSession("p_prc")) : 0;
+				$("#total-price").html((price - (price * coupon) + shipping).toFixed(2) + " BAM");
 				//			$(".header-cart-total").html("Totals: " + price + " BAM");
 				//			$("#cart-notification").html(notifications); 
 			} else {
+				/* reset everything to an empty cart */
 				$(".table-shopping-cart").html(
 					'<tr class="table-row"><td class="m-l-r-auto"><p class="lead m-l-10">There are currently no items in your cart.</p></td><td><div class="size12 trans-0-4 m-t-10 m-b-10 m-r-10"> <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4"> Go to shop </button> </div></td></tr>'
 				);
+				$("#cart-subtotals").html("0.00 BAM");
+				$("#total-price").html("0.00 BAM");
+				$("#apply-coupon-button").prop("disabled", false);
+				$("#apply-coupon-button").removeClass("disabled");
+				$("#enter-coupon").attr("placeholder", "Enter a coupon:");
+				$("#apply-coupon-button").html("Apply coupon");
 			}
 		}
 	</script>
@@ -579,10 +580,13 @@
 				url: "rest/v1/db/products/" + Utility.getFromSession("p_id"),
 				method: "GET",
 				success: function (result) {
+					/* check for registered user discount */
+					var userDiscount = (Utility.getFromStorage("ath_usr")) ? 0.05 : 0;
 					/* get necessary data */
 					product.id = result.id;
 					product.name = result.product_name;
-					product.price = result.product_price + " BAM";
+					product.price = (parseFloat(result.product_price) - parseFloat(result.product_price) * userDiscount).toFixed(2) +
+						" BAM";
 					product.picture = result.product_picture;
 					/* load product info into product page */
 					$(".slick3").slick("slickRemove", 0);
@@ -601,6 +605,12 @@
 					/* load breadcrumb */
 					$("#bread-category").html(result.product_category);
 					$("#bread-product").html(result.product_name);
+
+					/* make category breadcrumb clickable */
+					$("#bread-category").on("click", function () {
+						console.log($(this).html());
+						listShopItems($(this).html());
+					});
 				}
 			});
 			/* chosen quantity of items */
@@ -762,15 +772,17 @@
 								status = "block2-labelnew"
 							else if (result[i].status == "hot")
 								status = "block2-labelsale"
+							/* check for registered user discount */
+							var userDiscount = (Utility.getFromStorage("ath_usr")) ? 0.05 : 0;
 							/* build HTML */
 							html +=
 								'<div class="col-sm-12 col-md-6 col-lg-4 p-b-50"><div class="block2"><div class="block2-img wrap-pic-w of-hidden pos-relative ' +
 								status + '"><img src="' +
 								result[i].product_picture +
-								'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"><i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i><i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i></a><div class="shop-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
+								'" alt="IMG-PRODUCT"><div class="block2-overlay trans-0-4"><a href="#product" class="block2-btn-addwishlist hov-pointer trans-0-4"></a><div class="shop-page-btn block2-btn-addcart w-size1 trans-0-4"><button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to Cart</button></div></div></div><div class="block2-txt p-t-20"><a id="' +
 								result[i].id + '" href="#product" class="block2-name dis-block s-text3 p-b-5">' +
-								result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + result[i]
-								.product_price +
+								result[i].product_name + '</a><span class="block2-price m-text6 p-r-5">' + (parseFloat(result[i]
+									.product_price) - parseFloat(result[i].product_price) * userDiscount).toFixed(2) +
 								' BAM</span></div></div></div>';
 						}
 						(result.length != 1) ? $("#result-count").html("Showing " + result.length + " results."):
@@ -816,14 +828,14 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered ">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Log in to Flink Webshop</h4>
+				<h4 class="modal-title" id="myModalLabel">Flink Webshop</h4>
 				<button type="button" class="close" data-dismiss="modal">
 					<span aria-hidden="true">×</span>
 					<span class="sr-only">Close</span>
 				</button>
 			</div>
 			<!-- Dynamically loaded modal body -->
-			<div class="modal-body">
+			<div id="login-modal-body" class="modal-body">
 
 			</div>
 		</div>
@@ -831,69 +843,341 @@
 </div>
 
 </html>
-
+<!--===============================================================================================-->
 <script>
 	var loginScreen =
-		'<div class="row"><div class="col-sm-6"><div class="card bg-light p-3"><div class="card-body"><div class="card-title"><p class="lead highlight">Sign in</p></div><form id="loginForm" method="POST" action="/login/" novalidate="novalidate"><div class="form-group"><label for="username" class="control-label">Username:</label><input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com"><span class="help-block"></span></div><div class="form-group"><label for="password" class="control-label">Password:</label><input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password"><span class="help-block"></span></div><a href="cart.html" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Log in</a><a href="/forgot/" class="btn btn-default btn-block">Help to login</a></form></div></div></div><div class="col-sm-6"><p class="lead">Register now for<span class="highlight"> FREE</span></p><ul class="list-unstyled" style="line-height: 2"><li><span class="fa fa-check highlight"></span> Save your cart</li><li><span class="fa fa-check highlight"></span> Add products to wishlist</li><li><span class="fa fa-check highlight"></span> Get a 5% discount on all purchases</li><li></a></li></ul><p><span id="sign-up-redirect" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Sign up</span></p></div></div>';
+		'<div class="row"><div class="col-sm-6"><div class="card bg-light p-3"><div class="card-body"><div class="card-title"><p class="lead highlight">Sign in</p></div><form id="loginForm"><div class="form-group"><label for="email" class="control-label">Email:</label><input type="text" class="form-control" id="email" name="email" value="" required="" title="Please enter you email" placeholder="example@gmail.com"><span class="help-block"></span></div><div class="form-group"><label for="password" class="control-label">Password:</label><input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password"><span class="help-block"></span></div><button type="submit" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Log in</a></form></div></div></div><div class="col-sm-6"><p class="lead">Register now for<span class="highlight"> FREE</span></p><ul class="list-unstyled" style="line-height: 2"><li><span class="fa fa-check highlight"></span> Save your cart</li><li><span class="fa fa-check highlight"></span> Add products to wishlist</li><li><span class="fa fa-check highlight"></span> Get a 5% discount on all purchases</li><li></a></li></ul><p><span id="sign-up-redirect" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Sign up</span></p></div></div>';
 	var signupScreen =
-		'<div class="row"><div class="col-sm-12"><div class="card bg-light p-3"><div class="card-body"><div class="card-title"><p class="lead highlight">Sign up</p></div><form id="signupForm"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="username" class="control-label"><em>Username: *</em></label><input type="text" class="form-border form-control" id="username" name="username" value="" required="" title="Please enter you username"><span class="help-block"></span></div></div><div class="col-sm-6"><div class="form-group"><label for="email" class="control-label"><em>Email: *</em></label><input type="email" class="form-border form-control" id="email" name="email" value="" required="" title="Please enter your email"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="password" class="control-label"><em>Password: *</em></label><input type="password" class="form-border form-control" id="password" name="password" value="" required="" title="Please enter your password"><span class="help-block"></span></div></div><div class="col-sm-6"><div class="form-group"><label for="rePassword" class="control-label"><em>Confirm password: *</em></label><input type="password" class="form-border form-control" id="rePassword" name="rePassword" value="" required="" title="Please enter your password"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group"><label for="country" class="control-label"><em>Country:</em></label><select class="form-control" name="country" id="country-list"><option value="BA">Bosnia & Herzegovina</option><option value="HR">Croatia</option><option value="SR">Serbia</option><option value="MN">Montenegro</option><option value="SL">Slovenia</option><option value="MK">Macedonia</option></select></div></div><div class="col-sm-5"><div class="form-group"><label for="address" class="control-label"><em>Address:</em></label><input type="text" class="form-border form-control" id="address" name="address" value="" title="Please enter your address"><span class="help-block"></span></div></div><div class="col-sm-3"><div class="form-group"><label for="zipcode" class="control-label"><em>Zipcode:</em></label><input type="number" class="form-border form-control" id="zipcode" name="zipcode" value="" title="Please enter your zipcode"><span class="help-block"></span></div></div></div><div class="row"><div class="col-sm-10"><button type="submit" id="sign-up-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Sign up</button></div><div class="col-sm-2"><span id="go-back-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4"><i class="fa fa-arrow-left" aria-hidden="true"></i></span></div></div><span class="btn btn-default btn-block"><small>Fields marked with an asterisk(*) are mandatory.</small></span></form></div></div></div></div>';
-	/* When modal is closed, revert to basic login screen */
-	$("#login-overlay").on("hidden.bs.modal", function() {
-		$(".modal-body").html(loginScreen);
+		'<div class="row"> <div class="col-sm-12"> <div class="card bg-light p-3"> <div class="card-body"> <div class="card-title"> <p class="lead highlight">Sign up</p></div><form id="signupForm"> <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label for="username" class="control-label"> <em>Username: *</em> </label> <input type="text" class="form-border form-control" id="username" name="username" value="" required="" title="Please enter you username"> <span class="help-block"></span> </div></div><div class="col-sm-6"> <div class="form-group"> <label for="email" class="control-label"> <em>Email: *</em> </label> <input type="email" class="form-border form-control" id="email" name="email" value="" required="" title="Please enter your email"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-6"> <div class="form-group"> <label for="realname" class="control-label"> <em>Real name: </em> </label> <input type="text" class="form-border form-control" id="realname" name="realname" value="" title="Please enter you real name"> <span class="help-block"></span> </div></div><div class="col-sm-6"> <div class="form-group"> <label for="phone" class="control-label"> <em>Phone number: </em> </label> <input type="number" class="form-border form-control" id="phone" name="phone" value="" title="Please enter your phone number"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-6"> <div class="form-group"> <label for="password" class="control-label"> <em>Password: *</em> </label> <input type="password" class="form-border form-control" id="password" name="password" value="" required="" title="Please enter your password"> <span class="help-block"></span> </div></div><div class="col-sm-6"> <div class="form-group"> <label for="rePassword" class="control-label"> <em>Confirm password: *</em> </label> <input type="password" class="form-border form-control" id="rePassword" name="rePassword" value="" required="" title="Please enter your password"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-4"> <div class="form-group"> <label for="country" class="control-label"> <em>Country:</em> </label> <select class="form-control" name="country" id="country-list"> <option value="BA">Bosnia & Herzegovina</option> <option value="HR">Croatia</option> <option value="SR">Serbia</option> <option value="MN">Montenegro</option> <option value="SL">Slovenia</option> <option value="MK">Macedonia</option> </select> </div></div><div class="col-sm-5"> <div class="form-group"> <label for="address" class="control-label"> <em>Address:</em> </label> <input type="text" class="form-border form-control" id="address" name="address" value="" title="Please enter your address"> <span class="help-block"></span> </div></div><div class="col-sm-3"> <div class="form-group"> <label for="zipcode" class="control-label"> <em>Zipcode:</em> </label> <input type="number" class="form-border form-control" id="zipcode" name="zipcode" value="" title="Please enter your zipcode"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-10"> <button type="submit" id="sign-up-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Sign up</button> </div><div class="col-sm-2"> <span id="go-back-button" title="Go back to login" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4"> <i class="fa fa-arrow-left" aria-hidden="true"></i> </span> </div></div><span class="btn btn-default btn-block"> <small>Fields marked with an asterisk(*) are mandatory.</small> </span> </form> </div></div></div></div>';
+	var updateScreen =
+	' <div class="row"> <div class="col-sm-12"> <div class="card bg-light p-3"> <div class="card-body"> <div class="card-title"> <p class="lead highlight">Sign up</p></div><form id="updateForm"> <div class="row"> <div class="col-sm-12"> <div class="form-group"> <label for="email" class="control-label"> <em>New email: *</em> </label> <input type="email" class="form-border form-control" id="email-f" name="email" value="" required="" title="Please enter your email"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-6"> <div class="form-group"> <label for="realname" class="control-label"> <em>Real name: </em> </label> <input type="text" class="form-border form-control" id="realname-f" name="realname" value="" title="Please enter you real name"> <span class="help-block"></span> </div></div><div class="col-sm-6"> <div class="form-group"> <label for="phone" class="control-label"> <em>Phone number: </em> </label> <input type="number" class="form-border form-control" id="phone-f" name="phone" value="" title="Please enter your phone number"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-6"> <div class="form-group"> <label for="password" class="control-label"> <em>New password: *</em> </label> <input type="password" class="form-border form-control" id="password-f" name="password" value="" required="" title="Please enter your password"> <span class="help-block"></span> </div></div><div class="col-sm-6"> <div class="form-group"> <label for="rePassword" class="control-label"> <em>Confirm new password: *</em> </label> <input type="password" class="form-border form-control" id="rePassword-f" name="rePassword" value="" required="" title="Please enter your password"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-4"> <div class="form-group"> <label for="country" class="control-label"> <em>Country:</em> </label> <select class="form-control" name="country" id="country-list"> <option value="BA">Bosnia & Herzegovina</option> <option value="HR">Croatia</option> <option value="SR">Serbia</option> <option value="MN">Montenegro</option> <option value="SL">Slovenia</option> <option value="MK">Macedonia</option> </select> </div></div><div class="col-sm-5"> <div class="form-group"> <label for="address" class="control-label"> <em>Address:</em> </label> <input type="text" class="form-border form-control" id="address-f" name="address" value="" title="Please enter your address"> <span class="help-block"></span> </div></div><div class="col-sm-3"> <div class="form-group"> <label for="zipcode" class="control-label"> <em>Zipcode:</em> </label> <input type="number" class="form-border form-control" id="zipcode-f" name="zipcode" value="" title="Please enter your zipcode"> <span class="help-block"></span> </div></div></div><div class="row"> <div class="col-sm-10"> <button type="submit" id="update-up-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Update information</button> </div><div class="col-sm-2"> <span id="go-back-button" title="Go back to login" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4"> <i class="fa fa-arrow-left" aria-hidden="true"></i> </span> </div></div><span class="btn btn-default btn-block"> <small>Fields marked with an asterisk(*) are mandatory.</small> </span> </form> </div></div></div></div>';
+	/* When modal is closed, revert to basic login screen or log out screen for users */
+	$("#login-overlay").on("hidden.bs.modal", function () {
+		if (Utility.getFromStorage("ath_usr")) {
+			$("#login-modal-body").html(showCurrentUser());
+			/* Show different option depending on current subscription status */
+			if (JSON.parse(Utility.getFromStorage("ath_usr")).subscribed == "1") {
+				$("#subscription-link").html(
+					'<li id="subscription-link"><span class="fa fa-check highlight"></span> Newsletter subscription</li>');
+				$("#subscribe-button").html("Unsubscribe");
+			} else {
+				$("#subscription-link").html(
+					'<li id="subscription-link"><span class="fa fa-times highlight"></span> Newsletter subscription</li>');
+				$("#subscribe-button").html("Subscribe");
+			}
+		} else {
+			$("#login-modal-body").html(loginScreen);
+			validateLogin();
+		}
 	});
 
 	/* Initial loading of modal */
-	$(".modal-body").ready(function () {
-		$(".modal-body").html(loginScreen);
-	})
-
-	/* go back to login from sign up form */
-	$(".modal-body").on("click", "#go-back-button", function () {
-		$(".modal-body").html(loginScreen);
+	$("#login-modal-body").ready(function () {
+		$("#login-modal-body").html(loginScreen);
+		validateLogin();
 	});
 
-	$(".modal-body").on("click", "#sign-up-redirect", function () {
-		$(".modal-body").html(signupScreen);
-		$("#signupForm").validate({
-				rules: {
-					username: {
-						required: true,
-						rangelength: [8, 24]
-					},
-					email: {
-						required: true,
-						email: true
-					},
-					password: {
-						required: true,
-						rangelength: [8, 24]
-					},
-					rePassword: {
-						required: true,
-						equalTo: "#password"
-					}
+	/* go back to login from sign up form */
+	$("#login-modal-body").on("click", "#go-back-button", function () {
+		$("#login-modal-body").html(loginScreen);
+			validateLogin();
+	});
+
+	/* Login validation (not really necessary, but nice to have) */
+	function validateLogin() {
+		$("#loginForm").validate({
+			rules: {
+				email: {
+					required: true,
+					email: true
 				},
-				messages: {
-					username: {
-						required: "You must choose a username.",
-						rangelength: "Your username should be between {0} and {1} characters."
-					},
-					email: {
-						required: "You must enter an email.",
-						email: "You must enter a valid email address"
-					},
-					password: {
-						required: "You must choose a password.",
-						rangelength: "Your password must be between {0} and {1} characters."
-					},
-					rePassword: {
-						required: "You must confirm your password.",
-						equalTo: "The passwords do not match."
-					}
-				},
-				submitHandler: function(form) {
-					form.submit();
+				password: {
+					required: true,
+					rangelength: [8, 24]
 				}
-			});
+			},
+			messages: {
+				email: {
+					required: "You must enter your email.",
+					email: "You must enter a valid email address"
+				},
+				password: {
+					required: "You must enter your password.",
+					rangelength: "Your password must be between {0} and {1} characters."
+				}
+			},
+			/* Submit log in form */
+			submitHandler: function (form) {
+				$.ajax({
+					url: "rest/v1/users/login",
+					method: "POST",
+					data: $("#loginForm").serialize(),
+					success: function (data) {
+						Utility.addToStorage("ath_usr", JSON.stringify(data));
+						updateCartToDiscount();
+						loadUserCart();
+						swal("Successful login!", "Welcome, " + data.user_name + ". Enjoy your stay.", "success").then(e => {
+							window.location = ".";
+						});
+					},
+					error: function (response) {
+						if (response.responseJSON.status == "pass_incorrect") {
+							swal("Incorrect password!", "This password does not match the entered email address.", "error");
+						} else if (response.responseJSON.status == "email_incorrect") {
+							swal("Incorrect email!", "This email does not in exist our database.", "error");
+						} else if (response.responseJSON.status == "not_activated") {
+							swal("Activation pending!", "This account has not been activated yet.", "error");
+						} else {
+							swal("Unknown error", "An unknown error has occured. Please try again.", "error");
+						}
+					}
+				});
+			}
+		});
+	}
+
+	/* Validate sign up form */
+	$("#login-modal-body").on("click", "#sign-up-redirect", function () {
+		$("#login-modal-body").html(signupScreen);
+		$("#signupForm").validate({
+			rules: {
+				username: {
+					required: true,
+					rangelength: [8, 24]
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				password: {
+					required: true,
+					rangelength: [8, 24]
+				},
+				rePassword: {
+					required: true,
+					equalTo: "#password"
+				}
+			},
+			messages: {
+				username: {
+					required: "You must choose a username.",
+					rangelength: "Your username should be between {0} and {1} characters."
+				},
+				email: {
+					required: "You must enter an email.",
+					email: "You must enter a valid email address"
+				},
+				password: {
+					required: "You must choose a password.",
+					rangelength: "Your password must be between {0} and {1} characters."
+				},
+				rePassword: {
+					required: "You must confirm your password.",
+					equalTo: "The passwords do not match."
+				}
+			},
+			submitHandler: function (form) {
+				$.ajax({
+					url: "rest/v1/users/add",
+					method: "POST",
+					data: $("#signupForm").serialize(),
+					success: function () {
+						$("#login-modal-body").html(loginScreen);
+						validateLogin();
+						swal("Successful registration!", "Please check your inbox for the activation mail.", "success");
+					},
+					error: function (response) {
+						if (response.responseJSON.status == "duplicate") {
+							swal("Duplicate account!", "An account with the same email address already exists.", "error");
+						} else {
+							swal("Unknown error", "An unknown error has occured. Please try again.", "error");
+						}
+					},
+					complete: function () {
+						/* clear form */
+						$("#signupForm").trigger("reset");
+					}
+				});
+				//form.submit();
+			}
+		});
+	});
+
+	/* If user is logged in, show appropriate options */
+	if (Utility.getFromStorage("ath_usr")) {
+		$("#login-modal-body").ready(function () {
+			$("#login-modal-body").html(showCurrentUser());
+			showCurrentUser();
+			/* Show different option depending on current subscription status */
+			if (JSON.parse(Utility.getFromStorage("ath_usr")).subscribed == "1") {
+				$("#subscription-link").html(
+					'<li id="subscription-link"><span class="fa fa-check highlight"></span> Newsletter subscription</li>');
+				$("#subscribe-button").html("Unsubscribe");
+			} else {
+				$("#subscription-link").html(
+					'<li id="subscription-link"><span class="fa fa-times highlight"></span> Newsletter subscription</li>');
+				$("#subscribe-button").html("Subscribe");
+			}
+		});
+	}
+
+	/* Handle user subscription/unsubscription from the newsletter */
+	$("#login-modal-body").on("click", "#subscribe-button", function () {
+		$.ajax({
+			url: "rest/v1/private/subscribe",
+			method: "GET",
+			headers: {
+				"Flink-Web-Auth-JWT": JSON.parse(Utility.getFromStorage("ath_usr")).token
+			},
+			success: function () {
+				var user = JSON.parse(Utility.getFromStorage("ath_usr"));
+				if (user.subscribed == "0") {
+					user.subscribed = 1;
+					$("#subscription-link").html(
+						'<li id="subscription-link"><span class="fa fa-check highlight"></span> Newsletter subscription</li>');
+					$("#subscribe-button").html("Unsubscribe");
+					swal("Successful subscription!", "Thank you for subscribing and taking an interest in our work.", "success");
+				} else {
+					user.subscribed = 0;
+					$("#subscription-link").html(
+						'<li id="subscription-link"><span class="fa fa-times highlight"></span> Newsletter subscription</li>');
+					$("#subscribe-button").html("Subscribe");
+					swal("Successful unsubscription!", "You have successfully unsubscribed.", "success");
+				}
+				Utility.addToStorage("ath_usr", JSON.stringify(user));
+			},
+			error: function () {
+				swal("Failed subscription!", "There has been an error. Please try again.", "error");
+			}
+		});
+	});
+
+	function showCurrentUser() {
+		var user = JSON.parse(Utility.getFromStorage("ath_usr"));
+		var userlis = user.user_name;
+		var emaillis = user.email;
+		var namelis = user.real_name;
+		var phonenumberlis = user.phone_number;
+		var addresslis = user.address;
+		var zipcodelis = user.zipcode;
+
+		return '<div class="row"> <div class="col-sm-6"> <div class="card bg-light p-3"> <div class="card-body"> <div class="card-title"> <p class="lead highlight">Logged in as: <span id="user-lis">' + userlis + '</span></p></div></div><ul class="list-unstyled" style="line-height: 2"> <li> <span class="fa fa-user highlight"></span> <strong> Email: </strong> <span id="email-lis">' + emaillis + '</span> </li><li> <hr> <span class="fa fa-user highlight"></span> <strong> Name and surname: </strong> <span id="name-lis">' + namelis + '</span> </li><li> <span class="fa fa-phone highlight"></span> <strong> Phone number: </strong> <span id="phone-number-lis">' + phonenumberlis + '</span> </li><li> <span class="fa fa-map-marker highlight"></span> <strong> Address: </strong> <span id="address-lis">' + addresslis + '</span> </li><li> <span class="fa fa-envelope highlight"></span> <strong> Zipcode: </strong> <span id="zipcode-lis">' + zipcodelis + '</span> <hr> </li></ul> <div class="row"><button id="log-out-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">Log out</button></div></div></div><div class="col-sm-6"> <p class="lead">Additional <span class="highlight"> FEATURES</span> </p><ul class="list-unstyled" style="line-height: 2"> <li> <span class="fa fa-check highlight"></span> 5% discount on all purchases</li><li> <span class="fa fa-check highlight"></span> Automatic cart saving</li><li id="subscription-link"> <span class="fa fa-check highlight"></span> Newsletter subscription</li></ul> <p> <span id="subscribe-button" class="pseudo-span flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4 m-t-10">Sign up</span> </p></div></div>';
+	}
+
+	/* Log out */
+	function logOut() {
+		saveUserCart();
+		Utility.clearStorage();
+		Utility.clearSession();
+		window.location = ".";
+	}
+
+	$("#login-modal-body").on("click", "#log-out-button", function () {
+		logOut();
+	});
+	$("#logout").on("click", function() {
+		logOut();
+	});
+
+	/* update logged in user */
+	$("#login-modal-body").on("click", "#update-user-button", function () {
+		$("#login-modal-body").html(updateScreen);
+	});
+</script>
+<!--===============================================================================================-->
+<script>
+	/* Update all carts when the user has loggid in */
+	function updateCartToDiscount() {
+		var products = Utility.getMultipleFromSession("product");
+		for (var i = 0; i < products.length; i++) {
+			var product = JSON.parse(products[i]);
+			product.price = (parseFloat(product.price.split(" ")[0]) - parseFloat(product.price.split(" ")[0]) * 0.05) + " BAM";
+			Utility.addToSession("product_" + product.id, JSON.stringify(product));
+		}
+	}
+</script>
+<!--===============================================================================================-->
+<script>
+	/* Save user cart on logout */
+	function saveUserCart() {
+		var savedCart = [];
+		var products = Utility.getMultipleFromSession("product");
+		for (var i = 0; i < products.length; i++) {
+			var product = JSON.parse(products[i]);
+			savedCart[i] = {
+				product_id: product.id,
+				product_quantity: product.quantity
+			}
+		}
+
+		/* Send cart to server */
+		$.ajax({
+			url: "rest/v1/private/db/carts",
+			method: "POST",
+			data: {
+				cart: JSON.stringify(savedCart)
+			},
+			headers: {
+				"Flink-Web-Auth-JWT": JSON.parse(Utility.getFromStorage("ath_usr")).token
+			}
+		});
+	}
+
+	/* Load user cart on login */
+	function loadUserCart() {
+		var jsonCart = {};
+		$.ajax({
+			url: "rest/v1/private/db/carts",
+			method: "GET",
+			headers: {
+				"Flink-Web-Auth-JWT": JSON.parse(Utility.getFromStorage("ath_usr")).token
+			},
+			success: function (result) {
+				jsonCart = JSON.parse(result.cart_contents);
+				console.log(jsonCart);
+				for (var i = 0; i < jsonCart.length; i++) {
+					pullProducts(jsonCart, i);
+				}
+
+			}
+		});
+	}
+	/* helper function for cart loading */
+	function pullProducts(jsonCart, i) {
+		$.ajax({
+			url: "rest/v1/db/products/" + jsonCart[i].product_id,
+			method: "GET",
+			success: function (data) {
+				var product = {
+					id: data.id,
+					name: data.product_name,
+					picture: data.product_picture,
+					price: (parseFloat(data.product_price) - parseFloat(data.product_price) * 0.05).toFixed(2) + " BAM",
+					quantity: jsonCart[i].product_quantity
+				}
+				if (Utility.getFromSession("product_" + product.id) !== null)
+					product.quantity = product.quantity + JSON.parse(Utility.getFromSession("product_" + product.id)).quantity;
+				Utility.addToSession("product_" + product.id, JSON.stringify(product));
+			}
+		});
+	}
+</script>
+<!--===============================================================================================-->
+<script>
+	$(document).ready(function () {
+		$(".popup-cart-button").on("click", function () {
+			$(".header-cart").removeClass("show-header-dropdown");
+		});
+
+		if (Utility.getFromStorage("ath_usr")) {
+			$(".header-icons3").attr("title", "My Account");
+
+		} else {
+			$(".header-icons3").attr("title", "Log in/Sign up");
+		}
+	});
+
+	$("body").on("click", "#sign-up-banner-button", function () {
+		$("#login-overlay").modal("show");
 	});
 </script>
